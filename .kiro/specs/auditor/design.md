@@ -35,4 +35,4 @@ Las peticiones de extracción del DOM deben ser atómicas (solo el elemento sele
 **Validates: Requirements 1**
 
 ## Testing Strategy
-Se validará manualmente que la extensión cargue en `chrome://extensions` sin errores de Manifest. Las interfaces de paso de mensajes entre el Service Worker y el panel se probarán verificando los logs de red y de consola nativos del modo desarrollador de Chrome.
+Se validará manualmente que la extensión cargue en ch`chrome://extensions` sin errores de Manifest. Las interfaces de paso de mensajes entre el Service Worker y el panel se probarán verificando los logs de red y de consola nativos del modo desarrollador de Chrome.

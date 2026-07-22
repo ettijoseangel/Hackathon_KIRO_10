@@ -17,3 +17,7 @@ Extensión de Chrome orientada al panel de DevTools para auditar accesibilidad (
 ## Rules & Constraints
 - Respetar estrictamente las políticas de seguridad de contenido (CSP) de Manifest V3 (no usar `eval()` ni código inline peligroso).
 - Kiro no debe alucinar ni proponer la instalación de librerías externas (NPM) a menos que se solicite explícitamente en una tarea. Todo debe resolverse con código nativo y las APIs de Chrome.
+
+## Language Rules
+- **Regla Estricta:** Toda la documentación interna, la redacción de requerimientos, los planes de tareas, el diseño y las respuestas generadas por Kiro DEBEN estar exclusivamente en **Español**.
+- **Excepción:** Únicamente las palabras clave de la metodología EARS (WHEN, THE SYSTEM SHALL, IF, etc.) y la sintaxis pura del código (variables, funciones, HTML) permanecerán en inglés.

@@ -52,7 +52,7 @@ export default function MyReports() {
         setError('No se encontró ningún reporte con ese código')
         setReport(null)
       }
-    } catch (err) {
+    } catch {
       setError('Error al buscar el reporte. Por favor, intenta de nuevo.')
       setReport(null)
     } finally {

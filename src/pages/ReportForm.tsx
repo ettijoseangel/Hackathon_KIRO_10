@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import type { ChangeEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -32,21 +32,14 @@ function ReportForm() {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [imageError, setImageError] = useState<string | null>(null)
-  const [isCameraAvailable, setIsCameraAvailable] = useState<boolean>(false)
+  // Estado para indicar si la cámara está disponible (detectado al montar)
+  const isCameraAvailable = !!(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
 
   // Estado para indicador de carga HTTP
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submittedCode, setSubmittedCode] = useState<string | null>(null)
-
-  // Detectar disponibilidad de cámara
-  useEffect(() => {
-    // Verificar si el navegador soporta getUserMedia (API de cámara)
-    if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-      setIsCameraAvailable(true)
-    }
-  }, [])
 
   // Función para obtener ubicación GPS
   const handleGetGPSLocation = () => {
@@ -72,10 +65,9 @@ function ReportForm() {
         
         // Eliminar error de ubicación en tiempo real cuando se capture exitosamente
         if (validationErrors.location) {
-          setValidationErrors(prev => {
-            const { location, ...rest } = prev
-            return rest
-          })
+          setValidationErrors(prev =>
+            Object.fromEntries(Object.entries(prev).filter(([key]) => key !== 'location'))
+          )
         }
       },
       (error) => {
@@ -113,10 +105,9 @@ function ReportForm() {
       
       // Eliminar error de ubicación en tiempo real cuando el usuario corrija el campo
       if (validationErrors.location) {
-        setValidationErrors(prev => {
-          const { location, ...rest } = prev
-          return rest
-        })
+        setValidationErrors(prev =>
+          Object.fromEntries(Object.entries(prev).filter(([key]) => key !== 'location'))
+        )
       }
     } else {
       if (locationType === "manual") {
@@ -222,10 +213,9 @@ function ReportForm() {
     
     // Eliminar error en tiempo real cuando el usuario corrija el campo
     if (validationErrors.title && value.trim()) {
-      setValidationErrors(prev => {
-        const { title, ...rest } = prev
-        return rest
-      })
+      setValidationErrors(prev =>
+        Object.fromEntries(Object.entries(prev).filter(([key]) => key !== 'title'))
+      )
     }
   }
 
@@ -236,10 +226,9 @@ function ReportForm() {
     
     // Eliminar error en tiempo real cuando el usuario corrija el campo
     if (validationErrors.description && value.trim()) {
-      setValidationErrors(prev => {
-        const { description, ...rest } = prev
-        return rest
-      })
+      setValidationErrors(prev =>
+        Object.fromEntries(Object.entries(prev).filter(([key]) => key !== 'description'))
+      )
     }
   }
 
@@ -250,10 +239,9 @@ function ReportForm() {
     
     // Eliminar error en tiempo real cuando el usuario corrija el campo
     if (validationErrors.category && value.trim()) {
-      setValidationErrors(prev => {
-        const { category, ...rest } = prev
-        return rest
-      })
+      setValidationErrors(prev =>
+        Object.fromEntries(Object.entries(prev).filter(([key]) => key !== 'category'))
+      )
     }
   }
 
@@ -384,12 +372,24 @@ function ReportForm() {
                 }`}
               >
                 <option value="">Selecciona una categoría</option>
-                <option value="bache">Bache</option>
-                <option value="luminaria">Luminaria</option>
-                <option value="fuga">Fuga de agua</option>
-                <option value="basura">Acumulación de basura</option>
-                <option value="alcantarilla">Alcantarilla dañada</option>
-                <option value="otro">Otro</option>
+                <optgroup label="Servicio de Agua">
+                  <option value="agua-fuga">Fuga de agua</option>
+                  <option value="agua-falta">Falta de agua</option>
+                  <option value="agua-drenaje">Drenaje / Alcantarillado</option>
+                  <option value="agua-otro">Otro (Agua)</option>
+                </optgroup>
+                <optgroup label="Servicio Eléctrico">
+                  <option value="electrico-alumbrado">Alumbrado público</option>
+                  <option value="electrico-postes">Postes / Cables caídos</option>
+                  <option value="electrico-otro">Otro (Eléctrico)</option>
+                </optgroup>
+                <optgroup label="Servicios Municipales">
+                  <option value="municipal-baches">Baches</option>
+                  <option value="municipal-basura">Basura acumulada</option>
+                  <option value="municipal-areas-verdes">Áreas verdes</option>
+                  <option value="municipal-senalizacion">Señalización</option>
+                  <option value="municipal-otro">Otro (Municipal)</option>
+                </optgroup>
               </select>
               {validationErrors.category && (
                 <p className="text-sm text-destructive">

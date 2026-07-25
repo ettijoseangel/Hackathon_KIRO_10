@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import Landing from './pages/Landing'
 import ReportForm from './pages/ReportForm'
 import Dashboard from './pages/Dashboard'
 import MyReports from './pages/MyReports'
@@ -9,10 +10,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<ReportForm />} />
+        {/* Landing sin layout (tiene su propio diseño) */}
+        <Route path="/" element={<Landing />} />
+
+        {/* Rutas con layout de navegación */}
+        <Route element={<Layout />}>
+          <Route path="crear-reporte" element={<ReportForm />} />
           <Route path="mis-reportes" element={<MyReports />} />
-          {/* Dashboard accesible solo por URL directa (no aparece en menú) */}
+          {/* Dashboard accesible solo por URL directa (para administradores) */}
           <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>

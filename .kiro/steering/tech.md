@@ -1,22 +1,21 @@
-# Steering: Frontend - Auditor ARIA (Chrome Extension)
+# Steering: Frontend - Reportes Ciudadanos
 
 ## Product Context
-Extensión de Chrome orientada al panel de DevTools para auditar accesibilidad (WCAG) bajo demanda. Actúa como un asistente de remediación que identifica errores (como falta de atributos aria o contrastes) y devuelve sugerencias de código en formato de Task List UI interactiva.
+Plataforma web para registrar ciudadanamente problemas comunitarios (baches, luminarias, fugas) y permitir a las autoridades gestionar su estado. El frontend se enfoca en capturar datos limpios para facilitar su posterior análisis y en mostrar tableros de seguimiento claros.
 
 ## Tech Stack Obligatorio
-- **Core:** Vanilla TypeScript (o JavaScript moderno) y HTML5.
-- **Estilos:** Tailwind CSS (configuración minimalista/estática para no sobrecargar la extensión).
-- **Entorno:** Chrome Extensions API bajo **Manifest V3** (Estricto).
-- **Restricción Crítica:** NO usar frameworks reactivos pesados (React, Vue, Angular, etc.). La interfaz debe ser ultraligera para no impactar el rendimiento del navegador.
+- **Core:** React y Vite.
+- **Estilos y UI:** Tailwind CSS y shadcn/ui para componentes prearmados rápidos.
+- **Estado y Fetching:** `fetch` nativo o `axios` para interactuar con la API del backend.
+- **Restricción Crítica:** El frontend NO debe contener lógica de negocio compleja (como decidir prioridades o reglas de estado). Su única responsabilidad es renderizar la UI y comunicarse con el contrato de la API (JSON).
 
 ## Architecture & Structure
-1. **DevTools Page (`devtools.html` / `panel.js`):** La interfaz principal. Renderiza la matriz de errores como tareas y gestiona el Contexto Persistente apoyándose en `chrome.storage.local`.
-2. **Content Script (`content.js`):** Se inyecta en la página objetivo. Su única responsabilidad es escuchar eventos de inspección, extraer fragmentos precisos del DOM (etiquetas específicas) y enviarlas al background.
-3. **Service Worker (`background.js`):** El puente central. Maneja la comunicación asíncrona mediante mensajes (Message Passing) y ejecuta las llamadas `fetch` hacia el backend/API para evitar bloqueos por CORS.
+1. **Interfaz de Ciudadano:** Formularios de captura de datos (texto, fotos, ubicación) y línea de tiempo de seguimiento.
+2. **Dashboard de Administración:** Tablas de datos filtrables por prioridad y estado, con controles para actualizar el estado del reporte.
 
-## Rules & Constraints
-- Respetar estrictamente las políticas de seguridad de contenido (CSP) de Manifest V3 (no usar `eval()` ni código inline peligroso).
-- Kiro no debe alucinar ni proponer la instalación de librerías externas (NPM) a menos que se solicite explícitamente en una tarea. Todo debe resolverse con código nativo y las APIs de Chrome.
+## Security & Secrets
+- Respetar el principio de mínimo privilegio.
+- El agente NO debe intentar leer ni modificar archivos `.env`. Toda variable sensible de AWS o credencial se manejará fuera del alcance de Kiro.
 
 ## Language Rules
 - **Regla Estricta:** Toda la documentación interna, la redacción de requerimientos, los planes de tareas, el diseño y las respuestas generadas por Kiro DEBEN estar exclusivamente en **Español**.

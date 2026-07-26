@@ -4,6 +4,7 @@
  */
 import * as reporteModel from '../models/reporte.model.js';
 import { clasificarPrioridad } from './iaClassifier.js';
+import { generarYPersistirOrientacion } from './orientacionIA.service.js';
 
 // --- Constantes de validacion (alineadas con Prisma schema enums) ---
 
@@ -108,6 +109,11 @@ export async function crearReporte(datos) {
     contactoTelefono: datos.contactoTelefono?.trim() || null,
     justificacionIa: clasificacion.justificacion,
     clasificadoPorIa: clasificacion.clasificadoPorIa,
+  });
+
+  // 4. Generar orientacion IA (no bloqueante — Req 8.1, 8.5)
+  generarYPersistirOrientacion(reporte).catch((error) => {
+    console.error('[reporte.service] Error generando orientacion IA:', error.message);
   });
 
   return { exito: true, reporte };

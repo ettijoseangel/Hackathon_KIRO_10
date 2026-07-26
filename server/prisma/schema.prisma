@@ -2,6 +2,7 @@
 // Fuente de verdad: basedatos.md
 // Enums adaptados a los valores reales del dominio (requirements.md)
 // Campos adicionales: justificacion_ia, clasificado_por_ia (Req 3)
+// Modelo OrientacionIA agregado (Req 8, implementacionIA.md)
 
 generator client {
   provider = "prisma-client-js"
@@ -14,7 +15,6 @@ datasource db {
 }
 
 // --- Enums ---
-// Valores reales del proyecto (basedatos.md indica reemplazar los de ejemplo)
 
 enum AreaServicio {
   AGUA
@@ -83,7 +83,7 @@ model Reporte {
   contactoEmail     String?          @map("contacto_email")
   contactoTelefono  String?          @map("contacto_telefono")
 
-  // Campos de clasificacion IA (extension a basedatos.md, requeridos por Req 3)
+  // Campos de clasificacion IA (Req 3)
   justificacionIa   String?          @map("justificacion_ia")
   clasificadoPorIa  Boolean          @default(false) @map("clasificado_por_ia")
 
@@ -91,6 +91,7 @@ model Reporte {
   updatedAt         DateTime         @updatedAt @map("updated_at")
 
   historialEstados  HistorialEstado[]
+  orientacionIA     OrientacionIA?
 
   @@map("reportes")
 }
@@ -106,4 +107,31 @@ model HistorialEstado {
   reporte        Reporte        @relation(fields: [reporteId], references: [id])
 
   @@map("historial_estados")
+}
+
+/// Orientacion IA: institucion, medios de contacto, proximos pasos.
+/// Relacion 1:1 con Reporte. Fuente: basedatos.md + implementacionIA.md (Req 8)
+model OrientacionIA {
+  id                     String   @id @default(uuid()) @db.Uuid
+  reporteId              String   @unique @map("reporte_id") @db.Uuid
+
+  institucionNombre      String?  @map("institucion_nombre")
+  institucionDescripcion String?  @map("institucion_descripcion")
+  institucionSitioWeb    String?  @map("institucion_sitio_web")
+  confianza              Decimal? @db.Decimal(3, 2)
+
+  mediosContacto         Json?    @map("medios_contacto")
+  proximosPasos          Json?    @map("proximos_pasos")
+
+  requiereMasInformacion Boolean  @default(false) @map("requiere_mas_informacion")
+  mensajeFallback        String?  @map("mensaje_fallback")
+
+  modeloIA               String?  @map("modelo_ia")
+  promptVersion          String?  @map("prompt_version")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  reporte                Reporte  @relation(fields: [reporteId], references: [id], onDelete: Cascade)
+
+  @@map("orientacion_ia")
 }

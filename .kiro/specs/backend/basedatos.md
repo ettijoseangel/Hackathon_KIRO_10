@@ -1,10 +1,10 @@
 # Estructura de carpetas: Supabase + Prisma Migrate
 
-Guía de organización de proyecto y flujo de migraciones para el modelo `reportes` / `historial_estados`.
+Guía de organización de proyecto y flujo de migraciones para el modelo `reportes` / `historial_estados` / `orientacion_ia`.
 
 ## 0. Schema de Prisma (modelos)
 
-Este es el contenido que debe ir en `prisma/schema.prisma`. Incluye datasource, generator, enums y los dos modelos (`Reporte`, `HistorialEstado`) con su relación uno-a-muchos.
+Este es el contenido que debe ir en `prisma/schema.prisma`. Incluye datasource, generator, enums y los tres modelos (`Reporte`, `HistorialEstado`, `OrientacionIA`) con sus relaciones.
 
 > ⚠️ Los enums (`AreaServicio`, `CategoriaReporte`, `PrioridadReporte`, `EstadoReporte`, `TipoUbicacion`) tienen valores de ejemplo. Reemplázalos por los reales del proyecto antes de migrar.
 
@@ -55,6 +55,15 @@ enum TipoUbicacion {
   AREA
 }
 
+enum TipoMedioContacto {
+  WEB
+  EMAIL
+  TELEFONO
+  DIRECCION_FISICA
+  RED_SOCIAL
+  APP_MOVIL
+}
+
 model Reporte {
   id                String   @id @default(uuid()) @db.Uuid
   codigoSeguimiento String   @unique @map("codigo_seguimiento")
@@ -77,6 +86,7 @@ model Reporte {
   updatedAt         DateTime @updatedAt @map("updated_at")
 
   historialEstados  HistorialEstado[]
+  orientacionIA     OrientacionIA?
 
   @@map("reportes")
 }
@@ -93,7 +103,65 @@ model HistorialEstado {
 
   @@map("historial_estados")
 }
+
+/// Guarda la respuesta que la IA generó para un reporte: institución
+/// identificada, medios de contacto sugeridos y próximos pasos.
+/// Relación 1:1 con Reporte (cada reporte tiene, a lo sumo, una
+/// orientación vigente; si se re-procesa, se puede versionar o sobrescribir
+/// según la estrategia que elija el equipo — ver notas al final de la sección 5).
+model OrientacionIA {
+  id                     String   @id @default(uuid()) @db.Uuid
+  reporteId              String   @unique @map("reporte_id") @db.Uuid
+
+  // -- Institución identificada por la IA --
+  institucionNombre      String?  @map("institucion_nombre")
+  institucionDescripcion String?  @map("institucion_descripcion")
+  institucionSitioWeb    String?  @map("institucion_sitio_web")
+  confianza              Decimal? @db.Decimal(3, 2) // 0.00 - 1.00
+
+  // -- Medios de contacto y próximos pasos --
+  // Se guardan como JSON para respetar exactamente el schema de salida
+  // de la IA (arrays de objetos con tipo/valor/horario, orden/titulo/descripcion).
+  mediosContacto         Json?    @map("medios_contacto")
+  proximosPasos          Json?    @map("proximos_pasos")
+
+  // -- Estado del análisis --
+  requiereMasInformacion Boolean  @default(false) @map("requiere_mas_informacion")
+  mensajeFallback        String?  @map("mensaje_fallback")
+
+  // -- Metadatos del procesamiento --
+  modeloIA               String?  @map("modelo_ia")       // ej. "claude-sonnet-5"
+  promptVersion          String?  @map("prompt_version")  // versionado del prompt/lógica usada
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  reporte                Reporte  @relation(fields: [reporteId], references: [id], onDelete: Cascade)
+
+  @@map("orientacion_ia")
+}
 ```
+
+### Formato esperado de los campos JSON
+
+`mediosContacto`:
+```json
+[
+  { "tipo": "WEB", "valor": "https://sie.gob.do/reclamos", "horario_atencion": null },
+  { "tipo": "TELEFONO", "valor": "800-000-0000", "horario_atencion": "L-V 8:00-17:00" }
+]
+```
+
+`proximosPasos`:
+```json
+[
+  { "orden": 1, "titulo": "Confirmar institución", "descripcion": "Verifica que la SIE es la institución correcta para tu caso." },
+  { "orden": 2, "titulo": "Reunir evidencia", "descripcion": "Fotos, facturas, fecha y hora del corte." }
+]
+```
+
+Estos formatos coinciden con el **schema de salida** definido en `uso-ia-proyecto.md` (secciones 6 y 7), para que la respuesta de la IA pueda guardarse tal cual en la base de datos sin transformaciones adicionales.
+
+---
 
 ## 1. Estructura de carpetas recomendada
 
@@ -114,11 +182,13 @@ mi-proyecto/
 │   │
 │   ├── models/                    # (opcional) lógica de acceso a datos por entidad
 │   │   ├── reporte.model.js
-│   │   └── historialEstado.model.js
+│   │   ├── historialEstado.model.js
+│   │   └── orientacionIA.model.js
 │   │
 │   ├── services/                  # Reglas de negocio
 │   │   ├── reporte.service.js
-│   │   └── historialEstado.service.js
+│   │   ├── historialEstado.service.js
+│   │   └── orientacionIA.service.js  # llama a la IA y persiste el resultado
 │   │
 │   ├── controllers/                # Si usas Express/Fastify/etc.
 │   │   └── reporte.controller.js
@@ -140,7 +210,7 @@ mi-proyecto/
 | `prisma/` | Todo lo relacionado al esquema y migraciones. Prisma la crea y la gestiona. |
 | `src/db/` | Punto único de conexión (evita múltiples instancias de `PrismaClient`). |
 | `src/models/` | Consultas puras a la base de datos (CRUD). |
-| `src/services/` | Lógica de negocio (ej. cambiar estado y registrar en `historial_estados` en una transacción). |
+| `src/services/` | Lógica de negocio (ej. cambiar estado y registrar en `historial_estados` en una transacción; llamar al endpoint de la IA y guardar la respuesta en `orientacion_ia`). |
 | `src/controllers/` + `src/routes/` | Capa HTTP, si expones una API. |
 
 ---
@@ -216,7 +286,7 @@ npm install @prisma/client
 npx prisma init
 ```
 
-Esto crea `prisma/schema.prisma` y `.env`. Pega ahí el modelo (`reportes`, `historial_estados`, enums).
+Esto crea `prisma/schema.prisma` y `.env`. Pega ahí el modelo (`reportes`, `historial_estados`, `orientacion_ia`, enums).
 
 ### Crear la primera migración
 
@@ -235,7 +305,7 @@ Esto:
 npx prisma migrate dev --name descripcion_del_cambio
 ```
 
-Ejemplos de nombres: `add_area_servicio_enum`, `add_index_codigo_seguimiento`, `add_historial_comentario`.
+Ejemplos de nombres: `add_area_servicio_enum`, `add_index_codigo_seguimiento`, `add_historial_comentario`, `add_orientacion_ia`.
 
 ### Regenerar el cliente sin crear migración
 
@@ -288,6 +358,10 @@ npx prisma migrate reset
   npx prisma migrate dev
   ```
   para aplicar las migraciones nuevas que otros hayan creado.
+- **Sobre `OrientacionIA`:**
+  - Se modeló como relación **1:1** con `Reporte` (un reporte tiene, a lo sumo, una orientación vigente). Si el proyecto necesita **historial de versiones** (por ejemplo, el usuario pide "re-analizar" el reporte y se quiere conservar cada intento), cambia la relación a **1:N** quitando `@unique` de `reporteId` y ordenando por `createdAt` al consultar la más reciente.
+  - Los campos `mediosContacto` y `proximosPasos` se guardan como `Json` para no tener que crear tablas adicionales por cada ítem; si luego necesitas filtrar/consultar por tipo de medio de contacto (ej. "todos los reportes con opción de WhatsApp"), considera normalizarlos en tablas separadas (`MedioContactoIA`, `PasoSiguienteIA`).
+  - `onDelete: Cascade` en la relación implica que si se borra un `Reporte`, se borra también su `OrientacionIA`. Ajusta esta política según las reglas de retención de datos del proyecto.
 
 ---
 

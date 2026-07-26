@@ -1,22 +1,28 @@
-.env
-__pycache__/
-# Entorno virtual
-.venv/
-venv/
-env/
-
 # Variables de entorno
 .env
 .env.*
+!.env.example
+server/.env
+client/.env
 
-# Cache Python
-__pycache__/
-*.py[cod]
-*.pyo
+# Dependencias
+node_modules/
+.pnpm-store/
 
 # Logs
 logs/
 *.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build / artefactos de compilación
+dist/
+build/
+*.egg-info/
+
+# Prisma
+# ⚠️ NO ignorar prisma/migrations/ — se versiona en git (historial real de la BD)
 
 # Archivos temporales
 *.tmp
@@ -27,30 +33,17 @@ logs/
 .vscode/
 .idea/
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
+# Testing / coverage
+coverage/
+.nyc_output/
 
-# Build
-build/
-dist/
-*.egg-info/
+# Docker
+# (los volúmenes con datos persistentes ya viven fuera del repo; no hay
+#  archivos generados por Docker Compose que normalmente deban ignorarse aquí)
 
-# Migrations (si no quieres subirlas)
-# migrations/
+# Certificados / llaves (por si se agregan más adelante)
+*.pem
+*.key
 
-# SQLite
-*.db
-
-# MyPy
-.mypy_cache/
-
-# Ruff
-.ruff_cache/
-
-# Pyright
-.pyright/
-
-# Jupyter
+# Jupyter (solo si el proyecto incluye notebooks, ej. para prototipos de IA)
 .ipynb_checkpoints/

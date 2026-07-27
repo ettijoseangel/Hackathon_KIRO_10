@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import type { Location } from "@/types/report"
 import { MapPin, Navigation, Loader2, FileText, Camera, Upload, CheckCircle, WavesHorizontal, UtilityPole, Building2, Check, Copy } from "lucide-react"
 import { Link } from "react-router-dom"
+import { crearReporte } from "@/services/reporteService"
 
 // Categorías agrupadas por área de servicio
 const CATEGORIES = {
@@ -42,6 +43,22 @@ const CATEGORIES = {
       { value: "municipal-senalizacion", label: "Senalizacion" },
     ],
   },
+}
+
+// Mapeo de categorias frontend → enums del backend
+const CATEGORY_TO_BACKEND: Record<string, { areaServicio: string; categoria: string }> = {
+  'agua-fuga': { areaServicio: 'AGUA', categoria: 'INFRAESTRUCTURA' },
+  'agua-corte': { areaServicio: 'AGUA', categoria: 'SERVICIOS_PUBLICOS' },
+  'agua-presion': { areaServicio: 'AGUA', categoria: 'SERVICIOS_PUBLICOS' },
+  'agua-drenaje': { areaServicio: 'DRENAJE', categoria: 'INFRAESTRUCTURA' },
+  'electrico-falla': { areaServicio: 'ALUMBRADO', categoria: 'INFRAESTRUCTURA' },
+  'electrico-poste': { areaServicio: 'ALUMBRADO', categoria: 'SEGURIDAD' },
+  'electrico-alumbrado': { areaServicio: 'ALUMBRADO', categoria: 'SERVICIOS_PUBLICOS' },
+  'electrico-cables': { areaServicio: 'ALUMBRADO', categoria: 'SEGURIDAD' },
+  'municipal-bache': { areaServicio: 'BACHEO', categoria: 'INFRAESTRUCTURA' },
+  'municipal-basura': { areaServicio: 'RECOLECCION_BASURA', categoria: 'LIMPIEZA' },
+  'municipal-parque': { areaServicio: 'OTRO', categoria: 'SERVICIOS_PUBLICOS' },
+  'municipal-senalizacion': { areaServicio: 'OTRO', categoria: 'SEGURIDAD' },
 }
 
 function ReportForm() {
@@ -316,31 +333,47 @@ function ReportForm() {
     setIsSubmitting(true)
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Mapear categoria frontend → enums del backend
+      const backendCategory = CATEGORY_TO_BACKEND[category]
+      if (!backendCategory) {
+        alert('Categoria no valida. Selecciona una opcion.')
+        setIsSubmitting(false)
+        return
+      }
 
-      const trackingCode = `REP-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
-
-      console.log('Formulario valido, preparando envio:', {
-        title,
-        description,
-        category,
-        location,
-        image: imageFile,
-        trackingCode
+      const resultado = await crearReporte({
+        titulo: title.trim(),
+        descripcion: description.trim() || undefined,
+        areaServicio: backendCategory.areaServicio,
+        categoria: backendCategory.categoria,
+        tipoUbicacion: locationType === 'gps' ? 'PUNTO' : 'AREA',
+        latitud: location?.lat ?? undefined,
+        longitud: location?.lng ?? undefined,
+        direccion: locationType === 'manual' ? manualAddress.trim() : (gpsAddress ?? undefined),
+        colonia: undefined,
+        fotoUrl: null,
       })
 
-      setSubmittedCode(trackingCode)
+      if (resultado.error) {
+        alert(`Error: ${resultado.error.error}`)
+        return
+      }
 
-      setTitle("")
-      setDescription("")
-      setCategory("")
-      setLocation(null)
-      setManualAddress("")
-      setGpsAddress(null)
-      setLocationType(null)
-      setImageFile(null)
-      setImagePreview(null)
-      setValidationErrors({})
+      if (resultado.data) {
+        setSubmittedCode(resultado.data.codigoSeguimiento)
+
+        // Limpiar formulario
+        setTitle("")
+        setDescription("")
+        setCategory("")
+        setLocation(null)
+        setManualAddress("")
+        setGpsAddress(null)
+        setLocationType(null)
+        setImageFile(null)
+        setImagePreview(null)
+        setValidationErrors({})
+      }
     } catch (error) {
       console.error('Error al enviar el reporte:', error)
       alert('Error al enviar el reporte. Por favor, intenta de nuevo.')
@@ -407,8 +440,8 @@ function ReportForm() {
                             disabled={isSubmitting}
                             onClick={() => handleCategorySelect(item.value)}
                             className={`px-3 py-2 text-xs rounded-lg border text-left transition-all ${category === item.value
-                                ? "border-blue-500 bg-blue-50 text-blue-700 font-semibold"
-                                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                              ? "border-blue-500 bg-blue-50 text-blue-700 font-semibold"
+                              : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                               } disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
                             {item.label}

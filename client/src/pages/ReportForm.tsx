@@ -3,12 +3,12 @@ import type { ChangeEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Location } from "@/types/report"
-import { MapPin, Navigation, Loader2, FileText, Upload, Check, Copy, ChevronDown, Droplets, Zap, Building2, Info } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Navigation, Loader2, FileText, Upload, Check, ChevronDown, Droplets, Zap, Building2, Info } from "lucide-react"
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { crearReporte } from "@/services/reporteService"
+import { useNavigate } from "react-router-dom"
 
 // Pin personalizado para el mapa
 const mapPin = new L.DivIcon({
@@ -82,6 +82,8 @@ function MapClickHandler({ onMapClick }: { onMapClick: (lat: number, lng: number
 }
 
 function ReportForm() {
+  const navigate = useNavigate()
+
   // Estado del formulario
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -109,7 +111,6 @@ function ReportForm() {
 
   // Envío
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submittedCode, setSubmittedCode] = useState<string | null>(null)
 
   // GPS
   const handleGetGPS = () => {
@@ -192,11 +193,14 @@ function ReportForm() {
       })
       if (resultado.error) { alert(resultado.error.error); return }
       if (resultado.data) {
-        setSubmittedCode(resultado.data.codigoSeguimiento)
-        setTitle(""); setDescription(""); setCategory(""); setLocation(null)
-        setManualAddress(""); setImageFile(null); setImagePreview(null)
-        setEmail(""); setPhone("")
+        navigate('/reporte-detalle', {
+          state: {
+            reporte: resultado.data.reporte,
+            orientacionIA: resultado.data.orientacionIA,
+          }
+        })
       }
+
     } catch { alert('Error al enviar.') }
     finally { setIsSubmitting(false) }
   }
@@ -357,7 +361,7 @@ function ReportForm() {
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-1">Posicion en el mapa</p>
                 <p className="text-xs text-gray-400 mb-2">Haz clic en el mapa para ajustar la ubicacion del pin.</p>
-                <div className="rounded-xl overflow-hidden border border-gray-200 h-[280px]">
+                <div className="rounded-xl overflow-hidden border border-gray-200 h-70">
                   <MapContainer center={mapCenter} zoom={13} className="h-full w-full" style={{ zIndex: 0 }}>
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -472,7 +476,7 @@ function ReportForm() {
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <h3 className="text-sm font-bold text-gray-900 mb-3">Vista previa del reporte</h3>
               <div className="space-y-2 text-xs">
-                <div className="flex justify-between"><span className="text-gray-500">Titulo</span><span className="text-gray-800 font-medium truncate max-w-[140px]">{title || 'Sin titulo aun...'}</span></div>
+                <div className="flex justify-between"><span className="text-gray-500">Titulo</span><span className="text-gray-800 font-medium truncate max-w-35">{title || 'Sin titulo aun...'}</span></div>
                 <div className="flex justify-between"><span className="text-gray-500">Urgencia</span><span className={`font-semibold ${urgency === 'leve' ? 'text-green-600' : urgency === 'moderado' ? 'text-amber-600' : 'text-red-600'}`}>{urgency === 'leve' ? 'Leve' : urgency === 'moderado' ? 'Moderado' : 'Urgente'}</span></div>
               </div>
             </div>
@@ -480,7 +484,7 @@ function ReportForm() {
             {/* Info de seguimiento */}
             <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-5">
               <div className="flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-indigo-600 mt-0.5 flex-shrink-0" />
+                <Info className="w-4 h-4 text-indigo-600 mt-0.5 shrink-0" />
                 <div>
                   <p className="text-xs font-bold text-gray-800">¿Como dar seguimiento?</p>
                   <p className="text-xs text-gray-500 mt-1">Guarda tu numero de folio. Podras consultarlo en la pagina principal o con las notificaciones por correo.</p>
@@ -492,34 +496,7 @@ function ReportForm() {
       </div>
 
       {/* Modal de éxito */}
-      {submittedCode && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl p-8 text-center space-y-6">
-            <div className="w-16 h-16 border-4 border-green-500 rounded-full flex items-center justify-center mx-auto">
-              <Check className="w-9 h-9 text-green-500 stroke-[3]" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">¡Reporte Enviado!</h3>
-              <p className="text-gray-500 text-sm">Guarda tu codigo de seguimiento para consultar el estatus en cualquier momento.</p>
-            </div>
-            <div className="border-2 border-indigo-200 rounded-xl p-5 bg-indigo-50">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Folio de seguimiento</p>
-              <p className="text-3xl font-bold text-indigo-700">{submittedCode}</p>
-            </div>
-            <button onClick={() => { navigator.clipboard.writeText(submittedCode); alert('Codigo copiado') }}
-              className="w-full h-12 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all">
-              <Copy className="w-5 h-5" /> Copiar codigo
-            </button>
-            <Link to="/mis-reportes" onClick={() => setSubmittedCode(null)}
-              className="w-full h-12 flex items-center justify-center border-2 border-gray-200 text-indigo-700 font-bold rounded-xl hover:bg-gray-50 transition-all">
-              Consultar mi reporte
-            </Link>
-            <Link to="/" onClick={() => setSubmittedCode(null)} className="text-sm text-gray-500 hover:text-gray-700 font-medium">
-              Ir al inicio
-            </Link>
-          </div>
-        </div>
-      )}
+      
     </div>
   )
 }

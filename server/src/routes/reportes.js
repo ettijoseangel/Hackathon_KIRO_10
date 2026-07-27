@@ -89,6 +89,106 @@ const router = Router()
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *     OrientacionIA:
+ *       type: object
+ *       nullable: true
+ *       description: Orientacion institucional generada por IA. Null si la IA fallo o no hay API key.
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         reporteId:
+ *           type: string
+ *           format: uuid
+ *         institucionNombre:
+ *           type: string
+ *           nullable: true
+ *           example: "Servicios de Agua y Drenaje de Monterrey"
+ *         institucionDescripcion:
+ *           type: string
+ *           nullable: true
+ *           example: "Organismo encargado del suministro de agua potable y alcantarillado"
+ *         institucionSitioWeb:
+ *           type: string
+ *           nullable: true
+ *           example: "https://www.sadm.gob.mx"
+ *         confianza:
+ *           type: number
+ *           nullable: true
+ *           example: 0.92
+ *           description: Nivel de certeza de la IA (0.00 - 1.00)
+ *         mediosContacto:
+ *           type: array
+ *           nullable: true
+ *           items:
+ *             type: object
+ *             properties:
+ *               tipo:
+ *                 type: string
+ *                 enum: [web, email, telefono, direccion_fisica, red_social, app_movil]
+ *               valor:
+ *                 type: string
+ *               horario_atencion:
+ *                 type: string
+ *                 nullable: true
+ *           example:
+ *             - tipo: "telefono"
+ *               valor: "81-8150-6000"
+ *               horario_atencion: "L-V 8:00-17:00"
+ *             - tipo: "web"
+ *               valor: "https://www.sadm.gob.mx/reportes"
+ *               horario_atencion: null
+ *         proximosPasos:
+ *           type: array
+ *           nullable: true
+ *           items:
+ *             type: object
+ *             properties:
+ *               orden:
+ *                 type: integer
+ *               titulo:
+ *                 type: string
+ *               descripcion:
+ *                 type: string
+ *           example:
+ *             - orden: 1
+ *               titulo: "Confirmar institucion"
+ *               descripcion: "Verifica que Servicios de Agua y Drenaje es la institucion correcta."
+ *             - orden: 2
+ *               titulo: "Reunir evidencia"
+ *               descripcion: "Fotos de la fuga, direccion exacta, fecha de inicio."
+ *             - orden: 3
+ *               titulo: "Presentar reporte"
+ *               descripcion: "Llama al 81-8150-6000 o usa el formulario web."
+ *         requiereMasInformacion:
+ *           type: boolean
+ *           example: false
+ *           description: true si la IA no pudo identificar la institucion con certeza
+ *         mensajeFallback:
+ *           type: string
+ *           nullable: true
+ *           description: Pregunta aclaratoria o mensaje cuando requiere mas informacion
+ *         modeloIA:
+ *           type: string
+ *           nullable: true
+ *           example: "gemini-2.0-flash"
+ *         promptVersion:
+ *           type: string
+ *           nullable: true
+ *           example: "v1.0"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *     CrearReporteResponse:
+ *       type: object
+ *       properties:
+ *         reporte:
+ *           $ref: '#/components/schemas/Reporte'
+ *         orientacionIA:
+ *           $ref: '#/components/schemas/OrientacionIA'
  *     CrearReporteInput:
  *       type: object
  *       required:
@@ -152,7 +252,10 @@ const router = Router()
  * /api/reportes:
  *   post:
  *     summary: Crear un nuevo reporte ciudadano
- *     description: Crea un reporte con clasificacion automatica de prioridad por IA. Rate limit de 10 requests por IP cada 15 minutos.
+ *     description: |
+ *       Crea un reporte con clasificacion automatica de prioridad por IA y genera
+ *       orientacion institucional (institucion competente, medios de contacto, proximos pasos).
+ *       Rate limit de 10 requests por IP cada 15 minutos.
  *     tags: [Reportes]
  *     requestBody:
  *       required: true
@@ -162,11 +265,11 @@ const router = Router()
  *             $ref: '#/components/schemas/CrearReporteInput'
  *     responses:
  *       201:
- *         description: Reporte creado exitosamente
+ *         description: Reporte creado exitosamente con orientacion IA
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Reporte'
+ *               $ref: '#/components/schemas/CrearReporteResponse'
  *       400:
  *         description: Error de validacion
  *         content:
@@ -176,6 +279,7 @@ const router = Router()
  *       429:
  *         description: Demasiadas solicitudes
  */
+
 router.post('/', crearReporteLimiter(), reporteController.crearReporte)
 
 /**

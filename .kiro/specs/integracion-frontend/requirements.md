@@ -1,5 +1,7 @@
 # Requirements Document
 
+## Glossary
+
 ## Introduction
 Integración completa del frontend React con el backend Express ya funcional. Se rediseña la UI según los mockups de Figma (Variante B) y se conectan todos los componentes con las APIs reales. El objetivo es un producto funcional end-to-end para la demo del hackathon.
 
@@ -7,12 +9,15 @@ Integración completa del frontend React con el backend Express ya funcional. Se
 
 ### Requirement 1: Infraestructura de Conexión
 
+**User Story:**
 #### Acceptance Criteria
 1. WHEN el frontend necesite comunicarse con el backend, THE SYSTEM SHALL usar un cliente HTTP centralizado (`apiClient.ts`) que maneje URL base, errores y estados de carga.
 2. THE SYSTEM SHALL centralizar las llamadas en servicios (`reporteService.ts`, `orientacionService.ts`), nunca directamente en componentes.
 3. THE SYSTEM SHALL usar el proxy de Vite (`/api` → `localhost:3001`) en desarrollo.
 
 ### Requirement 2: Landing Page
+**User Story:**
+
 
 #### Acceptance Criteria
 1. THE SYSTEM SHALL mostrar una landing page con hero, buscador de folio, estadísticas fijas, áreas de servicio con categorías y CTA para crear reporte.
@@ -20,6 +25,8 @@ Integración completa del frontend React con el backend Express ya funcional. Se
 3. THE SYSTEM SHALL incluir navbar con links a Inicio, Mis reportes, Mapa, Ayuda y botón "Crear reporte".
 
 ### Requirement 3: Formulario de Reporte
+**User Story:**
+
 
 #### Acceptance Criteria
 1. WHEN el ciudadano quiera crear un reporte, THE SYSTEM SHALL presentar un formulario con título (0/120), descripción (0/600), nivel de urgencia, categoría por área con acordeón, ubicación (GPS + mapa interactivo con pin clicable), evidencia fotográfica y datos de contacto opcionales.
@@ -28,12 +35,16 @@ Integración completa del frontend React con el backend Express ya funcional. Se
 4. WHEN el formulario se envíe exitosamente, THE SYSTEM SHALL mostrar modal con folio de seguimiento.
 
 ### Requirement 4: Consulta de Folio
+**User Story:**
+
 
 #### Acceptance Criteria
 1. WHEN el ciudadano ingrese un folio, THE SYSTEM SHALL buscar el reporte via `GET /api/reportes/:codigo` y mostrar su estado con progress tracker.
 2. IF el folio no existe, THEN THE SYSTEM SHALL mostrar mensaje de error claro.
 
 ### Requirement 5: Kit de Reporte (Orientación IA)
+**User Story:**
+
 
 #### Acceptance Criteria
 1. WHEN se consulte un reporte existente, THE SYSTEM SHALL mostrar la ficha completa con progress tracker (Pendiente → En Proceso → Resuelto).
@@ -42,6 +53,8 @@ Integración completa del frontend React con el backend Express ya funcional. Se
 4. IF no hay orientación disponible, THEN THE SYSTEM SHALL mostrar fallback con número 072.
 
 ### Requirement 6: Mapa de Incidencias
+**User Story:**
+
 
 #### Acceptance Criteria
 1. THE SYSTEM SHALL mostrar un mapa Leaflet/OpenStreetMap con pines de reportes activos que tengan coordenadas GPS.

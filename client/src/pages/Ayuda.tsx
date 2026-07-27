@@ -15,8 +15,8 @@ const FAQ = [
     respuesta: 'Puedes reportar problemas de agua y drenaje (fugas, cortes, presion baja), electricidad (alumbrado publico, postes caidos, cables) y servicios municipales (baches, basura, parques).'
   },
   {
-    pregunta: '¿Como funciona la clasificacion con IA?',
-    respuesta: 'Cuando creas un reporte, nuestro sistema de inteligencia artificial analiza la descripcion y asigna automaticamente una prioridad (Baja, Media, Alta o Urgente). Tambien te orienta sobre a que institucion contactar.'
+    pregunta: '¿Como funciona la Guia con IA?',
+    respuesta: 'Cuando creas un reporte, nuestro sistema de inteligencia artificial te orienta sobre a que institucion contactar.'
   },
   {
     pregunta: '¿Cuanto tiempo tarda en resolverse un reporte?',

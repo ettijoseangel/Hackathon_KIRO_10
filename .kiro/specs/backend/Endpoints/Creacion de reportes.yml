@@ -1,0 +1,30 @@
+info:
+  name: Creacion de reportes
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3001/api/reportes
+  body:
+    type: json
+    data: |
+      {
+        "titulo": "Falta de luz",
+        "descripcion": "No ha llegado la luz hace dos semanas",
+        "areaServicio": "ALUMBRADO",
+        "categoria":"INFRAESTRUCTURA",
+        "tipoUbicacion": "PUNTO",
+        "latitud": 25.675993,
+        "longitud": -100.324702,
+        "direccion": "Avenida Alfonso Reyes, Colonia Obrerista, Monterrey, Nuevo León, 64490, México",
+        "colonia": "Obrerista",
+        "contactoEmail": "test@test.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

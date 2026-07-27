@@ -1,0 +1,21 @@
+info:
+  name: cambiar estado del reporte
+  type: http
+
+http:
+  method: PATCH
+  url: http://localhost:3001/api/reportes/0c494fef-6e87-4bd8-8b55-9035f4d11914/estado
+  body:
+    type: json
+    data: |
+      {
+        "estado": "EN_PROCESO",
+        "comentario": "Se asignó cuadrilla"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

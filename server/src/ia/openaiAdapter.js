@@ -1,38 +1,52 @@
 /**
- * Adaptador de IA: Anthropic (Claude).
+ * Adaptador de IA: OpenAI (GPT).
  * Implementa la interfaz comun definida en iaInterface.js.
  * Req 9.3: aislado de la logica de negocio.
+ *
+ * Variable de entorno requerida: OPENAI_API_KEY
+ * Modelo por defecto: gpt-4o-mini
  */
 
 const TIMEOUT_MS = 10_000
-const MODEL = 'claude-sonnet-4-6'
+const MODEL = 'gpt-4o-mini'
 const PROMPT_VERSION = 'v1.0'
 
 const PRIORIDADES_VALIDAS = ['BAJA', 'MEDIA', 'ALTA', 'URGENTE']
 
 /**
- * Realiza una llamada a la API de Anthropic.
+ * Realiza una llamada a la API de OpenAI (Chat Completions).
  * @param {string} prompt - Contenido del mensaje de usuario
+ * @param {number} maxTokens - Tokens maximos de respuesta
  * @returns {Promise<string|null>} Texto de respuesta o null si falla
  */
-async function llamarAnthropic (prompt) {
-  const apiKey = process.env.ANTHROPIC_API_KEY
+async function llamarOpenAI (prompt, maxTokens = 1024) {
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) return null
 
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        Authorization: `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         model: MODEL,
-        messages: [{ role: 'user', content: prompt }]
+        max_tokens: maxTokens,
+        temperature: 0.2,
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un asistente que responde UNICAMENTE con JSON valido, sin texto adicional.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
       }),
       signal: controller.signal
     })
@@ -40,18 +54,18 @@ async function llamarAnthropic (prompt) {
     clearTimeout(timeoutId)
 
     if (!response.ok) {
-      console.error('[anthropicAdapter] API status:', response.status)
+      console.error('[openaiAdapter] API status:', response.status)
       return null
     }
 
     const data = await response.json()
-    return data.content?.[0]?.text || null
+    return data.choices?.[0]?.message?.content || null
   } catch (error) {
     clearTimeout(timeoutId)
     if (error.name === 'AbortError') {
-      console.error('[anthropicAdapter] Timeout: API no respondio en 10s')
+      console.error('[openaiAdapter] Timeout: API no respondio en 10s')
     } else {
-      console.error('[anthropicAdapter] Error:', error.message)
+      console.error('[openaiAdapter] Error:', error.message)
     }
     return null
   }
@@ -64,7 +78,9 @@ async function llamarAnthropic (prompt) {
  */
 function extraerJSON (texto) {
   try {
-    const jsonMatch = texto.match(/\{[\s\S]*\}/)
+    // OpenAI a veces envuelve JSON en ```json ... ```
+    const limpio = texto.replace(/```json\s*/g, '').replace(/```\s*/g, '')
+    const jsonMatch = limpio.match(/\{[\s\S]*\}/)
     if (!jsonMatch) return null
     return JSON.parse(jsonMatch[0])
   } catch {
@@ -76,7 +92,6 @@ function extraerJSON (texto) {
  * Clasifica la prioridad de un reporte ciudadano.
  * @param {{titulo: string, descripcion: string, categoria: string}} input
  * @returns {Promise<{prioridad: string, justificacion: string|null, clasificadoPorIa: boolean}|null>}
- *   null indica que se debe usar fallback (la capa superior se encarga).
  */
 export async function clasificarPrioridad ({ titulo, descripcion, categoria }) {
   const prompt = `Eres un sistema de clasificacion de reportes ciudadanos para el municipio de Monterrey.
@@ -98,12 +113,12 @@ Criterios:
 - MEDIA: afecta comodidad pero no es critico (ej: bache, falta de alumbrado)
 - BAJA: estetico o menor impacto (ej: pintura deteriorada, jardineria)`
 
-  const texto = await llamarAnthropic(prompt, 150)
+  const texto = await llamarOpenAI(prompt, 150)
   if (!texto) return null
 
   const resultado = extraerJSON(texto)
   if (!resultado || !PRIORIDADES_VALIDAS.includes(resultado.prioridad)) {
-    console.error('[anthropicAdapter] Prioridad invalida o JSON malformado')
+    console.error('[openaiAdapter] Prioridad invalida o JSON malformado')
     return null
   }
 
@@ -158,16 +173,15 @@ Responde UNICAMENTE con un JSON valido con esta estructura:
   "pregunta_aclaratoria": null
 }`
 
-  const texto = await llamarAnthropic(prompt, 1024)
+  const texto = await llamarOpenAI(prompt, 1024)
   if (!texto) return null
 
   const resultado = extraerJSON(texto)
   if (!resultado) {
-    console.error('[anthropicAdapter] No se pudo extraer JSON de orientacion')
+    console.error('[openaiAdapter] No se pudo extraer JSON de orientacion')
     return null
   }
 
-  // Mapear al formato interno del sistema
   return {
     institucionNombre: resultado.institucion?.nombre || null,
     institucionDescripcion: resultado.institucion?.descripcion || null,

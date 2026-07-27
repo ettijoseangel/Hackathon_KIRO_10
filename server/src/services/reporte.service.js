@@ -3,7 +3,6 @@
  * Orquesta validaciones, clasificacion IA, y operaciones de datos.
  */
 import * as reporteModel from '../models/reporte.model.js'
-import { clasificarPrioridad } from './iaClassifier.js'
 import { generarYPersistirOrientacion } from './orientacionIA.service.js'
 
 // --- Constantes de validacion (alineadas con Prisma schema enums) ---
@@ -84,12 +83,7 @@ export async function crearReporte (datos) {
     return { exito: false, errores }
   }
 
-  // 2. Clasificar prioridad con IA (Req 3)
-  const clasificacion = await clasificarPrioridad({
-    titulo: datos.titulo,
-    descripcion: datos.descripcion || '',
-    categoria: datos.categoria
-  })
+ 
 
   // 3. Insertar en BD
   const reporte = await reporteModel.crearReporte({
@@ -97,7 +91,7 @@ export async function crearReporte (datos) {
     descripcion: datos.descripcion?.trim() || null,
     areaServicio: datos.areaServicio,
     categoria: datos.categoria,
-    prioridad: clasificacion.prioridad,
+    prioridad: 'MEDIA',
     tipoUbicacion: datos.tipoUbicacion,
     latitud: datos.latitud ?? null,
     longitud: datos.longitud ?? null,
@@ -107,16 +101,20 @@ export async function crearReporte (datos) {
     fotoUrl: datos.fotoUrl || null,
     contactoEmail: datos.contactoEmail?.trim() || null,
     contactoTelefono: datos.contactoTelefono?.trim() || null,
-    justificacionIa: clasificacion.justificacion,
-    clasificadoPorIa: clasificacion.clasificadoPorIa
+    justificacionIa: null,
+    clasificadoPorIa: false
   })
 
-  // 4. Generar orientacion IA (no bloqueante — Req 8.1, 8.5)
-  generarYPersistirOrientacion(reporte).catch((error) => {
+  // 4. Generar orientacion IA (Req 8.1, 8.5)
+  let orientacionIA = null
+  try {
+    orientacionIA = await generarYPersistirOrientacion(reporte)
+  } catch (error) {
     console.error('[reporte.service] Error generando orientacion IA:', error.message)
-  })
+  }
 
-  return { exito: true, reporte }
+  return { exito: true, reporte, orientacionIA }
+
 }
 
 /**

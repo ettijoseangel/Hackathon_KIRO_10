@@ -1,0 +1,178 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "8.1 Corregir `src/services/iaClassifier.js`": [
+      {
+        "executionId": "33122c52-3e70-4083-9b7a-056d0619d6b0",
+        "chatSessionId": "sess_62f0ff91-721d-41eb-a2df-61d6019feed0",
+        "timestamp": 1785095413130
+      }
+    ],
+    "8.2 Corregir `src/services/reporte.service.js`": [
+      {
+        "executionId": "33122c52-3e70-4083-9b7a-056d0619d6b0",
+        "chatSessionId": "sess_62f0ff91-721d-41eb-a2df-61d6019feed0",
+        "timestamp": 1785095413831
+      }
+    ],
+    "8.3 Corregir `src/services/orientacionIA.service.js`": [
+      {
+        "executionId": "33122c52-3e70-4083-9b7a-056d0619d6b0",
+        "chatSessionId": "sess_62f0ff91-721d-41eb-a2df-61d6019feed0",
+        "timestamp": 1785095414666
+      }
+    ],
+    "11.1 Configurar framework de testing (vitest o jest)": [
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098365326
+      },
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098459347
+      }
+    ],
+    "11.2 Tests unitarios para servicios (iaClassifier, reporte.service, orientacionIA.service)": [
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098462657
+      },
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098630417
+      }
+    ],
+    "11.3 Tests de integración para los 5 endpoints": [
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098633754
+      },
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098783419
+      }
+    ],
+    "11. Tests": [
+      {
+        "executionId": "a1ff2627-8bbe-4377-91e2-e4d7b0174f72",
+        "chatSessionId": "sess_df382c1b-d4e7-4fe4-a878-51986fe59673",
+        "timestamp": 1785098783466
+      }
+    ],
+    "12.1 Crear `server/Dockerfile` (producción)": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098896913
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098901670
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099074999
+      }
+    ],
+    "12.2 Crear `server/Dockerfile.dev` (desarrollo con nodemon)": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098896953
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098902429
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099075878
+      }
+    ],
+    "12.3 Crear `docker-compose.yml` (base)": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098897007
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098903181
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099076595
+      }
+    ],
+    "12.4 Crear `docker-compose.override.yml` (desarrollo)": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098897062
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098903934
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099077382
+      }
+    ],
+    "12.5 Crear `nginx/` con Dockerfile y conf.d/default.conf": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098897093
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098904729
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099078241
+      }
+    ],
+    "12.6 Crear `deploy/deploy.sh`": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098897121
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785098905500
+      },
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099078984
+      }
+    ],
+    "12. Docker y Deployment": [
+      {
+        "executionId": "c4936fc2-9ceb-4450-bea7-cdc66cc8b73c",
+        "chatSessionId": "sess_a62330fa-5cd1-4b6b-a068-c0ea886d54bb",
+        "timestamp": 1785099079028
+      }
+    ]
+  }
+}

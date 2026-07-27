@@ -1,44 +1,53 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { FileText, Search } from 'lucide-react'
+import { FileText, Search, Home, Shield, Plus } from 'lucide-react'
 
 function Layout() {
   const location = useLocation()
-  
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-slate-100">
-      <nav className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 border-b-4 border-indigo-800 shadow-xl">
-        <div className="container mx-auto px-6 py-5">
+    <div className="min-h-screen bg-gray-50/50">
+      <nav className="bg-white border-b-3 border-[#DBEAFE] ">
+        <div className="container mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg">
-                <FileText className="w-7 h-7 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Reportes Ciudadanos</h1>
-                <p className="text-sm text-blue-100 font-medium">Sistema de Gestión Comunitaria</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <Shield className="w-5 h-5 text-blue-600" />
+              <span className="text-base font-bold text-gray-900">Reportes Ciudadanos</span>
+            </Link>
+
+            {/* Links de navegación */}
+            <div className="flex items-center gap-1">
               <Link
                 to="/"
-                className={`px-6 py-3 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
-                  location.pathname === '/' 
-                    ? 'bg-white text-blue-700 shadow-lg' 
-                    : 'bg-blue-700 text-white hover:bg-blue-800 shadow-md'
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/'
+                    ? 'text-blue-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <FileText className="w-5 h-5" />
+                <Home className="w-4 h-4" />
+                Inicio
+              </Link>
+              <Link
+                to="/crear-reporte"
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/crear-reporte'
+                    ? 'border border-blue-600 text-blue-700 bg-blue-50'
+                    : 'border border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                <Plus className="w-4 h-4" />
                 Crear Reporte
               </Link>
               <Link
                 to="/mis-reportes"
-                className={`px-6 py-3 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
-                  location.pathname === '/mis-reportes' 
-                    ? 'bg-white text-blue-700 shadow-lg' 
-                    : 'bg-blue-700 text-white hover:bg-blue-800 shadow-md'
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/mis-reportes'
+                    ? 'text-blue-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <Search className="w-5 h-5" />
+                <FileText className="w-4 h-4" />
                 Mis Reportes
               </Link>
             </div>

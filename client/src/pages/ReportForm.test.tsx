@@ -111,7 +111,7 @@ describe('ReportForm - Validación de Campos Obligatorios', () => {
       })
     }
     
-    // @ts-ignore
+    // @ts-expect-error - mocking geolocation API for testing
     global.navigator.geolocation = mockGeolocation
     
     render(<ReportForm />)
@@ -148,7 +148,7 @@ describe('ReportForm - Validación de Campos Obligatorios', () => {
       })
     }
     
-    // @ts-ignore
+    // @ts-expect-error - mocking geolocation API for testing
     global.navigator.geolocation = mockGeolocation
     
     render(<ReportForm />)
@@ -270,7 +270,7 @@ describe('ReportForm - Captura de Ubicación', () => {
       
       // Mock del navegador sin soporte de geolocalización
       const originalGeolocation = global.navigator.geolocation
-      // @ts-ignore
+      // @ts-expect-error - mocking geolocation API for testing
       delete global.navigator.geolocation
       
       render(<ReportForm />)
@@ -302,7 +302,7 @@ describe('ReportForm - Captura de Ubicación', () => {
         })
       }
       
-      // @ts-ignore
+      // @ts-expect-error - mocking geolocation API for testing
       global.navigator.geolocation = mockGeolocation
       
       render(<ReportForm />)
@@ -345,7 +345,7 @@ describe('ReportForm - Captura de Ubicación', () => {
         })
       }
       
-      // @ts-ignore
+      // @ts-expect-error - mocking geolocation API for testing
       global.navigator.geolocation = mockGeolocation
       
       render(<ReportForm />)
@@ -374,7 +374,7 @@ describe('ReportForm - Captura de Ubicación', () => {
         })
       }
       
-      // @ts-ignore
+      // @ts-expect-error - mocking geolocation API for testing
       global.navigator.geolocation = mockGeolocation
       
       render(<ReportForm />)
@@ -422,7 +422,7 @@ describe('ReportForm - Captura de Ubicación', () => {
         getCurrentPosition: vi.fn()
       }
       
-      // @ts-ignore
+      // @ts-expect-error - mocking geolocation API for testing
       global.navigator.geolocation = mockGeolocation
       
       render(<ReportForm />)

@@ -4,6 +4,7 @@ import Landing from './pages/Landing'
 import ReportForm from './pages/ReportForm'
 import MyReports from './pages/MyReports'
 import MapaIncidencias from './pages/MapaIncidencias'
+import Ayuda from './pages/Ayuda'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="crear-reporte" element={<ReportForm />} />
           <Route path="mis-reportes" element={<MyReports />} />
           <Route path="mapa" element={<MapaIncidencias />} />
+          <Route path="ayuda" element={<Ayuda />} />
         </Route>
       </Routes>
     </BrowserRouter>

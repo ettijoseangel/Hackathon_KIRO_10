@@ -1,61 +1,57 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { FileText, Search, Home, Shield, Plus, Map } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 
 function Layout() {
   const location = useLocation()
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      <nav className="bg-white border-b-3 border-[#DBEAFE] ">
-        <div className="container mx-auto px-6 py-3">
+      <nav className="bg-gradient-to-r from-indigo-700 to-blue-700 text-white">
+        <div className="container mx-auto px-6 py-3.5">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <Shield className="w-5 h-5 text-blue-600" />
-              <span className="text-base font-bold text-gray-900">Reportes Ciudadanos</span>
+            <Link to="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-bold">Reportes Ciudadanos</span>
             </Link>
 
             {/* Links de navegación */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-6">
               <Link
                 to="/"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/'
-                    ? 'text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                className={`text-sm font-medium transition-colors ${location.pathname === '/' ? 'text-white' : 'text-white/70 hover:text-white'
                   }`}
               >
-                <Home className="w-4 h-4" />
                 Inicio
               </Link>
               <Link
-                to="/crear-reporte"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/crear-reporte'
-                    ? 'border border-blue-600 text-blue-700 bg-blue-50'
-                    : 'border border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-              >
-                <Plus className="w-4 h-4" />
-                Crear Reporte
-              </Link>
-              <Link
                 to="/mis-reportes"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/mis-reportes'
-                    ? 'text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                className={`text-sm font-medium transition-colors ${location.pathname === '/mis-reportes' ? 'text-white' : 'text-white/70 hover:text-white'
                   }`}
               >
-                <FileText className="w-4 h-4" />
-                Mis Reportes
+                Mis reportes
               </Link>
               <Link
                 to="/mapa"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/mapa'
-                    ? 'text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                className={`text-sm font-medium transition-colors ${location.pathname === '/mapa' ? 'text-white' : 'text-white/70 hover:text-white'
                   }`}
               >
-                <Map className="w-4 h-4" />
                 Mapa
+              </Link>
+              <Link
+                to="/ayuda"
+                className={`text-sm font-medium transition-colors ${location.pathname === '/ayuda' ? 'text-white' : 'text-white/70 hover:text-white'
+                  }`}
+              >
+                Ayuda
+              </Link>
+              <Link
+                to="/crear-reporte"
+                className="bg-white text-indigo-700 font-bold text-sm px-5 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
+              >
+                Crear reporte
               </Link>
             </div>
           </div>

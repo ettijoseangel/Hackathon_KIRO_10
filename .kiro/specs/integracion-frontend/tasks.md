@@ -57,3 +57,27 @@ Rediseño completo del frontend e integración con el backend real. Cada tarea e
 - Sin menciones a "Monterrey" en el branding — solo "Reportes Ciudadanos".
 - Leaflet + OpenStreetMap para mapas (gratis, sin API key).
 - El backend ya está funcional y validado en Postman.
+
+## Task Dependency Graph
+
+```json
+{
+  "waves": [
+    { "id": 0, "tasks": ["0.1", "0.2", "0.3", "0.4"] },
+    { "id": 1, "tasks": ["2.1"] },
+    { "id": 2, "tasks": ["2.2", "2.3"] },
+    { "id": 3, "tasks": ["2.4", "2.5", "2.6"] },
+    { "id": 4, "tasks": ["2.7", "2.8"] },
+    { "id": 5, "tasks": ["3.1", "3.2"] },
+    { "id": 6, "tasks": ["3.3", "3.4", "3.5"] },
+    { "id": 7, "tasks": ["3.6"] },
+    { "id": 8, "tasks": ["1.1", "1.6"] },
+    { "id": 9, "tasks": ["1.2", "1.3"] },
+    { "id": 10, "tasks": ["1.4", "1.5"] },
+    { "id": 11, "tasks": ["4.1"] },
+    { "id": 12, "tasks": ["4.2", "4.3"] },
+    { "id": 13, "tasks": ["4.4", "4.5"] },
+    { "id": 14, "tasks": ["5.1", "5.2", "5.3", "5.4"] }
+  ]
+}
+```

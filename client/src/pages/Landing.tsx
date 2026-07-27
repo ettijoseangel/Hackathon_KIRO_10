@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Search, WavesHorizontal, UtilityPole, Building2, Phone, BarChart3, Shield } from "lucide-react";
+import { Plus, Search, WavesHorizontal, UtilityPole, Building2, Phone, Shield } from "lucide-react";
 import { listarReportes, type Reporte } from "@/services/reporteService";
 
 export default function Landing() {
@@ -220,9 +220,9 @@ export default function Landing() {
                       <td className="px-5 py-3 text-sm text-gray-700 truncate max-w-[200px]">{r.titulo}</td>
                       <td className="px-5 py-3">
                         <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${r.estado === 'RESUELTO' ? 'bg-green-50 text-green-700' :
-                            r.estado === 'EN_PROCESO' ? 'bg-blue-50 text-blue-700' :
-                              r.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-700' :
-                                'bg-gray-50 text-gray-700'
+                          r.estado === 'EN_PROCESO' ? 'bg-blue-50 text-blue-700' :
+                            r.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-700' :
+                              'bg-gray-50 text-gray-700'
                           }`}>
                           {r.estado === 'EN_PROCESO' ? 'En proceso' : r.estado === 'PENDIENTE' ? 'Pendiente' : r.estado === 'RESUELTO' ? 'Resuelto' : r.estado}
                         </span>
@@ -256,14 +256,12 @@ export default function Landing() {
 
 
 
-      {/* Botón Admin flotante */}
-      <Link
-        to="/dashboard"
-        className="fixed bottom-6 right-6 inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-300 transition-all"
-      >
-        <BarChart3 className="w-4 h-4" />
-        Admin
-      </Link>
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 py-6">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-xs text-gray-400">Reportes Ciudadanos &middot; Plataforma publica</p>
+        </div>
+      </footer>
     </div>
   );
 }

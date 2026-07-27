@@ -4,17 +4,23 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import reportesRouter from './routes/reportes.js';
 import guiaIARouter from './routes/guiaIa.js';
+import { securityHeaders, generalLimiter, sanitizeBody, errorHandler } from './middleware/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// --- Middleware ---
+// --- Middleware de seguridad ---
+app.use(securityHeaders());
+app.use(generalLimiter());
+
+// --- Middleware de parseo y CORS ---
 app.use(cors({
   origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
 }));
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+app.use(sanitizeBody());
 
 // --- Rutas ---
 app.get('/api/health', (req, res) => {
@@ -34,14 +40,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-// --- Middleware de error global (Req 7) ---
-// DEBE estar despues de todas las rutas
-app.use((err, req, res, next) => {
-  console.error('Error interno:', err.message);
-  if (process.env.NODE_ENV === 'development') {
-    console.error(err.stack);
-  }
-  res.status(500).json({ error: 'Error interno del servidor' });
-});
+// --- Middleware de error global ---
+app.use(errorHandler);
 
 export default app;

@@ -5,11 +5,12 @@
  */
 import { Router } from 'express';
 import * as reporteController from '../controllers/reporte.controller.js';
+import { crearReporteLimiter } from '../middleware/index.js';
 
 const router = Router();
 
 // POST /api/reportes — Crear reporte (con clasificacion IA)
-router.post('/', reporteController.crearReporte);
+router.post('/', crearReporteLimiter(), reporteController.crearReporte);
 
 // GET /api/reportes — Listar reportes (con filtros opcionales)
 router.get('/', reporteController.listarReportes);

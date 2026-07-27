@@ -18,14 +18,14 @@
  * @param {string} providerName - Nombre del proveedor (para mensajes de error)
  * @throws {Error} Si el adaptador no implementa las funciones requeridas
  */
-export function validarAdapter(adapter, providerName) {
-  const funcionesRequeridas = ['clasificarPrioridad', 'generarOrientacion'];
+export function validarAdapter (adapter, providerName) {
+  const funcionesRequeridas = ['clasificarPrioridad', 'generarOrientacion']
 
   for (const fn of funcionesRequeridas) {
     if (typeof adapter[fn] !== 'function') {
       throw new Error(
         `El adaptador "${providerName}" no implementa la funcion requerida: ${fn}`
-      );
+      )
     }
   }
 }

@@ -7,8 +7,8 @@
  * - X-XSS-Protection (filtro XSS del navegador)
  * - Content-Security-Policy (controla recursos permitidos)
  */
-import helmet from 'helmet';
+import helmet from 'helmet'
 
-export function securityHeaders() {
-  return helmet();
+export function securityHeaders () {
+  return helmet()
 }

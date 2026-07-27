@@ -12,32 +12,32 @@
  * 2. Registrarlo en el objeto ADAPTERS de este archivo.
  * 3. Configurar AI_PROVIDER=<nombre> en .env.
  */
-import * as anthropicAdapter from './anthropicAdapter.js';
-import { CLASIFICACION_FALLBACK, ORIENTACION_FALLBACK } from './fallbacks.js';
-import { validarAdapter } from './iaInterface.js';
+import * as anthropicAdapter from './anthropicAdapter.js'
+import { CLASIFICACION_FALLBACK, ORIENTACION_FALLBACK } from './fallbacks.js'
+import { validarAdapter } from './iaInterface.js'
 
 // --- Registro de adaptadores ---
 const ADAPTERS = {
-  anthropic: anthropicAdapter,
-};
+  anthropic: anthropicAdapter
+}
 
 /**
  * Obtiene el adaptador configurado por AI_PROVIDER.
  * @returns {object} Adaptador validado
  */
-function getAdapter() {
-  const provider = process.env.AI_PROVIDER || 'anthropic';
-  const adapter = ADAPTERS[provider];
+function getAdapter () {
+  const provider = process.env.AI_PROVIDER || 'anthropic'
+  const adapter = ADAPTERS[provider]
 
   if (!adapter) {
     console.error(
       `[ia/index] Proveedor "${provider}" no registrado. Proveedores disponibles: ${Object.keys(ADAPTERS).join(', ')}`
-    );
-    return null;
+    )
+    return null
   }
 
-  validarAdapter(adapter, provider);
-  return adapter;
+  validarAdapter(adapter, provider)
+  return adapter
 }
 
 /**
@@ -46,21 +46,21 @@ function getAdapter() {
  * @param {{titulo: string, descripcion: string, categoria: string}} input
  * @returns {Promise<{prioridad: string, justificacion: string|null, clasificadoPorIa: boolean}>}
  */
-export async function clasificarPrioridad(input) {
-  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.AI_PROVIDER_API_KEY;
+export async function clasificarPrioridad (input) {
+  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.AI_PROVIDER_API_KEY
   if (!apiKey) {
-    return CLASIFICACION_FALLBACK;
+    return CLASIFICACION_FALLBACK
   }
 
   try {
-    const adapter = getAdapter();
-    if (!adapter) return CLASIFICACION_FALLBACK;
+    const adapter = getAdapter()
+    if (!adapter) return CLASIFICACION_FALLBACK
 
-    const resultado = await adapter.clasificarPrioridad(input);
-    return resultado || CLASIFICACION_FALLBACK;
+    const resultado = await adapter.clasificarPrioridad(input)
+    return resultado || CLASIFICACION_FALLBACK
   } catch (error) {
-    console.error('[ia/index] Error en clasificarPrioridad:', error.message);
-    return CLASIFICACION_FALLBACK;
+    console.error('[ia/index] Error en clasificarPrioridad:', error.message)
+    return CLASIFICACION_FALLBACK
   }
 }
 
@@ -70,20 +70,20 @@ export async function clasificarPrioridad(input) {
  * @param {{reporteId: string, descripcionQueja: string, categoria: string|null, ubicacion: object}} input
  * @returns {Promise<object>} Resultado de orientacion o fallback
  */
-export async function generarOrientacion(input) {
-  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.AI_PROVIDER_API_KEY;
+export async function generarOrientacion (input) {
+  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.AI_PROVIDER_API_KEY
   if (!apiKey) {
-    return ORIENTACION_FALLBACK;
+    return ORIENTACION_FALLBACK
   }
 
   try {
-    const adapter = getAdapter();
-    if (!adapter) return ORIENTACION_FALLBACK;
+    const adapter = getAdapter()
+    if (!adapter) return ORIENTACION_FALLBACK
 
-    const resultado = await adapter.generarOrientacion(input);
-    return resultado || ORIENTACION_FALLBACK;
+    const resultado = await adapter.generarOrientacion(input)
+    return resultado || ORIENTACION_FALLBACK
   } catch (error) {
-    console.error('[ia/index] Error en generarOrientacion:', error.message);
-    return ORIENTACION_FALLBACK;
+    console.error('[ia/index] Error en generarOrientacion:', error.message)
+    return ORIENTACION_FALLBACK
   }
 }

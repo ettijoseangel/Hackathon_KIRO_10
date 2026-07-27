@@ -7,8 +7,8 @@
 export const CLASIFICACION_FALLBACK = {
   prioridad: 'MEDIA',
   justificacion: null,
-  clasificadoPorIa: false,
-};
+  clasificadoPorIa: false
+}
 
 export const ORIENTACION_FALLBACK = {
   institucionNombre: null,
@@ -19,5 +19,5 @@ export const ORIENTACION_FALLBACK = {
   proximosPasos: [],
   requiereMasInformacion: true,
   mensajeFallback: 'No fue posible identificar la institucion competente en este momento. Por favor, intenta de nuevo mas tarde o contacta directamente a tu municipio.',
-  modeloIA: null,
-};
+  modeloIA: null
+}

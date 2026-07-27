@@ -2,14 +2,14 @@
  * Modelo de acceso a datos: HistorialEstado
  * Consultas puras contra la BD usando PrismaClient.
  */
-import { prisma } from '../db/prisma.js';
+import { prisma } from '../db/prisma.js'
 
 /**
  * Obtiene el historial de estados de un reporte.
  * @param {string} reporteId - UUID del reporte
  * @returns {object[]} Array de cambios de estado ordenados cronologicamente
  */
-export async function obtenerHistorialPorReporte(reporteId) {
+export async function obtenerHistorialPorReporte (reporteId) {
   const historial = await prisma.historialEstado.findMany({
     where: { reporteId },
     orderBy: { changedAt: 'asc' },
@@ -17,11 +17,11 @@ export async function obtenerHistorialPorReporte(reporteId) {
       estadoAnterior: true,
       estadoNuevo: true,
       comentario: true,
-      changedAt: true,
-    },
-  });
+      changedAt: true
+    }
+  })
 
-  return historial;
+  return historial
 }
 
 /**
@@ -30,15 +30,15 @@ export async function obtenerHistorialPorReporte(reporteId) {
  * @param {object} datos - { reporteId, estadoAnterior, estadoNuevo, comentario? }
  * @returns {object} La entrada creada
  */
-export async function crearEntradaHistorial(datos) {
+export async function crearEntradaHistorial (datos) {
   const entrada = await prisma.historialEstado.create({
     data: {
       reporteId: datos.reporteId,
       estadoAnterior: datos.estadoAnterior ?? null,
       estadoNuevo: datos.estadoNuevo,
-      comentario: datos.comentario ?? null,
-    },
-  });
+      comentario: datos.comentario ?? null
+    }
+  })
 
-  return entrada;
+  return entrada
 }

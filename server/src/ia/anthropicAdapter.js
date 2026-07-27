@@ -4,11 +4,11 @@
  * Req 9.3: aislado de la logica de negocio.
  */
 
-const TIMEOUT_MS = 10_000;
-const MODEL = 'claude-sonnet-4-20250514';
-const PROMPT_VERSION = 'v1.0';
+const TIMEOUT_MS = 10_000
+const MODEL = 'claude-sonnet-4-20250514'
+const PROMPT_VERSION = 'v1.0'
 
-const PRIORIDADES_VALIDAS = ['BAJA', 'MEDIA', 'ALTA', 'URGENTE'];
+const PRIORIDADES_VALIDAS = ['BAJA', 'MEDIA', 'ALTA', 'URGENTE']
 
 /**
  * Realiza una llamada a la API de Anthropic.
@@ -16,12 +16,12 @@ const PRIORIDADES_VALIDAS = ['BAJA', 'MEDIA', 'ALTA', 'URGENTE'];
  * @param {number} maxTokens - Tokens maximos de respuesta
  * @returns {Promise<string|null>} Texto de respuesta o null si falla
  */
-async function llamarAnthropic(prompt, maxTokens = 1024) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return null;
+async function llamarAnthropic (prompt, maxTokens = 1024) {
+  const apiKey = process.env.ANTHROPIC_API_KEY
+  if (!apiKey) return null
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -29,33 +29,33 @@ async function llamarAnthropic(prompt, maxTokens = 1024) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: MODEL,
         max_tokens: maxTokens,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: prompt }]
       }),
-      signal: controller.signal,
-    });
+      signal: controller.signal
+    })
 
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId)
 
     if (!response.ok) {
-      console.error('[anthropicAdapter] API status:', response.status);
-      return null;
+      console.error('[anthropicAdapter] API status:', response.status)
+      return null
     }
 
-    const data = await response.json();
-    return data.content?.[0]?.text || null;
+    const data = await response.json()
+    return data.content?.[0]?.text || null
   } catch (error) {
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId)
     if (error.name === 'AbortError') {
-      console.error('[anthropicAdapter] Timeout: API no respondio en 10s');
+      console.error('[anthropicAdapter] Timeout: API no respondio en 10s')
     } else {
-      console.error('[anthropicAdapter] Error:', error.message);
+      console.error('[anthropicAdapter] Error:', error.message)
     }
-    return null;
+    return null
   }
 }
 
@@ -64,13 +64,13 @@ async function llamarAnthropic(prompt, maxTokens = 1024) {
  * @param {string} texto - Texto de respuesta de la IA
  * @returns {object|null} JSON parseado o null
  */
-function extraerJSON(texto) {
+function extraerJSON (texto) {
   try {
-    const jsonMatch = texto.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return null;
-    return JSON.parse(jsonMatch[0]);
+    const jsonMatch = texto.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) return null
+    return JSON.parse(jsonMatch[0])
   } catch {
-    return null;
+    return null
   }
 }
 
@@ -80,7 +80,7 @@ function extraerJSON(texto) {
  * @returns {Promise<{prioridad: string, justificacion: string|null, clasificadoPorIa: boolean}|null>}
  *   null indica que se debe usar fallback (la capa superior se encarga).
  */
-export async function clasificarPrioridad({ titulo, descripcion, categoria }) {
+export async function clasificarPrioridad ({ titulo, descripcion, categoria }) {
   const prompt = `Eres un sistema de clasificacion de reportes ciudadanos para el municipio de Monterrey.
 Analiza el siguiente reporte y asigna una prioridad.
 
@@ -98,22 +98,22 @@ Criterios:
 - URGENTE: peligro inmediato para la vida o salud publica (ej: fuga de gas, colapso estructural)
 - ALTA: afecta servicios esenciales de multiples personas (ej: corte de agua en colonia)
 - MEDIA: afecta comodidad pero no es critico (ej: bache, falta de alumbrado)
-- BAJA: estetico o menor impacto (ej: pintura deteriorada, jardineria)`;
+- BAJA: estetico o menor impacto (ej: pintura deteriorada, jardineria)`
 
-  const texto = await llamarAnthropic(prompt, 150);
-  if (!texto) return null;
+  const texto = await llamarAnthropic(prompt, 150)
+  if (!texto) return null
 
-  const resultado = extraerJSON(texto);
+  const resultado = extraerJSON(texto)
   if (!resultado || !PRIORIDADES_VALIDAS.includes(resultado.prioridad)) {
-    console.error('[anthropicAdapter] Prioridad invalida o JSON malformado');
-    return null;
+    console.error('[anthropicAdapter] Prioridad invalida o JSON malformado')
+    return null
   }
 
   return {
     prioridad: resultado.prioridad,
     justificacion: resultado.justificacion || null,
-    clasificadoPorIa: true,
-  };
+    clasificadoPorIa: true
+  }
 }
 
 /**
@@ -122,7 +122,7 @@ Criterios:
  * @param {{reporteId: string, descripcionQueja: string, categoria: string|null, ubicacion: object}} input
  * @returns {Promise<object|null>} Orientacion parseada o null para fallback
  */
-export async function generarOrientacion({ reporteId, descripcionQueja, categoria, ubicacion }) {
+export async function generarOrientacion ({ reporteId, descripcionQueja, categoria, ubicacion }) {
   const prompt = `Eres un asistente de orientacion ciudadana para Mexico.
 Tu tarea es analizar la siguiente queja/reporte y determinar:
 1. Que institucion u organismo es competente para atenderla.
@@ -158,15 +158,15 @@ Responde UNICAMENTE con un JSON valido con esta estructura:
   ],
   "requiere_mas_informacion": false,
   "pregunta_aclaratoria": null
-}`;
+}`
 
-  const texto = await llamarAnthropic(prompt, 1024);
-  if (!texto) return null;
+  const texto = await llamarAnthropic(prompt, 1024)
+  if (!texto) return null
 
-  const resultado = extraerJSON(texto);
+  const resultado = extraerJSON(texto)
   if (!resultado) {
-    console.error('[anthropicAdapter] No se pudo extraer JSON de orientacion');
-    return null;
+    console.error('[anthropicAdapter] No se pudo extraer JSON de orientacion')
+    return null
   }
 
   // Mapear al formato interno del sistema
@@ -180,6 +180,6 @@ Responde UNICAMENTE con un JSON valido con esta estructura:
     requiereMasInformacion: resultado.requiere_mas_informacion || false,
     mensajeFallback: resultado.pregunta_aclaratoria || null,
     modeloIA: MODEL,
-    promptVersion: PROMPT_VERSION,
-  };
+    promptVersion: PROMPT_VERSION
+  }
 }

@@ -7,8 +7,8 @@
  * - Incluye stack trace y detalles solo en desarrollo.
  * - Nunca expone informacion sensible al cliente en produccion.
  */
-import { InternalServerError } from '../lib/apiErrors.js';
-import { logger } from '../utils/logger.js';
+import { InternalServerError } from '../lib/apiErrors.js'
+import { logger } from '../utils/logger.js'
 
 /**
  * @param {Error} err - Error lanzado o pasado a next().
@@ -16,17 +16,17 @@ import { logger } from '../utils/logger.js';
  * @param {import('express').Response} res - Objeto de respuesta HTTP.
  * @param {import('express').NextFunction} next - Siguiente middleware.
  */
-export function errorHandler(err, req, res, next) {
-  const isDevelopment = process.env.NODE_ENV === 'development';
+export function errorHandler (err, req, res, next) {
+  const isDevelopment = process.env.NODE_ENV === 'development'
 
   // Si el error no tiene statusCode, convertirlo a InternalServerError
   if (!err.statusCode) {
-    err = new InternalServerError('Error inesperado', { original: err.message });
+    err = new InternalServerError('Error inesperado', { original: err.message })
   }
 
-  const statusCode = err.statusCode || 500;
-  const code = err.code || 'INTERNAL_SERVER_ERROR';
-  const message = err.message || 'Ocurrio un error inesperado';
+  const statusCode = err.statusCode || 500
+  const code = err.code || 'INTERNAL_SERVER_ERROR'
+  const message = err.message || 'Ocurrio un error inesperado'
 
   // Log del error con Winston
   logger.api.error(message, {
@@ -35,22 +35,22 @@ export function errorHandler(err, req, res, next) {
     path: req.originalUrl,
     method: req.method,
     stack: err.stack,
-    details: err.details,
-  });
+    details: err.details
+  })
 
   // Respuesta estandarizada al cliente
   const response = {
     status: 'error',
     httpStatus: statusCode,
     code,
-    message,
-  };
+    message
+  }
 
   // Solo incluir detalles y stack en desarrollo
   if (isDevelopment) {
-    response.details = err.details || null;
-    response.stack = err.stack;
+    response.details = err.details || null
+    response.stack = err.stack
   }
 
-  res.status(statusCode).json(response);
+  res.status(statusCode).json(response)
 }

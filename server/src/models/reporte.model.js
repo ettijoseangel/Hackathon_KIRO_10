@@ -3,28 +3,28 @@
  * Consultas puras contra la BD usando PrismaClient.
  * No contiene logica de negocio — solo operaciones CRUD.
  */
-import { prisma } from '../db/prisma.js';
+import { prisma } from '../db/prisma.js'
 
 /**
  * Genera un codigo de seguimiento unico con formato REP-XXX.
  * Consulta el ultimo codigo existente e incrementa.
  */
-async function generarCodigoSeguimiento() {
+async function generarCodigoSeguimiento () {
   const ultimoReporte = await prisma.reporte.findFirst({
     orderBy: { createdAt: 'desc' },
-    select: { codigoSeguimiento: true },
-  });
+    select: { codigoSeguimiento: true }
+  })
 
   if (!ultimoReporte) {
-    return 'REP-001';
+    return 'REP-001'
   }
 
   const ultimoNumero = parseInt(
     ultimoReporte.codigoSeguimiento.replace('REP-', ''),
     10
-  );
-  const nuevoNumero = ultimoNumero + 1;
-  return `REP-${String(nuevoNumero).padStart(3, '0')}`;
+  )
+  const nuevoNumero = ultimoNumero + 1
+  return `REP-${String(nuevoNumero).padStart(3, '0')}`
 }
 
 /**
@@ -32,8 +32,8 @@ async function generarCodigoSeguimiento() {
  * @param {object} datos - Campos del reporte (sin id, codigo_seguimiento, timestamps)
  * @returns {object} El reporte creado completo
  */
-export async function crearReporte(datos) {
-  const codigoSeguimiento = await generarCodigoSeguimiento();
+export async function crearReporte (datos) {
+  const codigoSeguimiento = await generarCodigoSeguimiento()
 
   const reporte = await prisma.reporte.create({
     data: {
@@ -54,11 +54,11 @@ export async function crearReporte(datos) {
       contactoEmail: datos.contactoEmail ?? null,
       contactoTelefono: datos.contactoTelefono ?? null,
       justificacionIa: datos.justificacionIa ?? null,
-      clasificadoPorIa: datos.clasificadoPorIa ?? false,
-    },
-  });
+      clasificadoPorIa: datos.clasificadoPorIa ?? false
+    }
+  })
 
-  return reporte;
+  return reporte
 }
 
 /**
@@ -66,23 +66,23 @@ export async function crearReporte(datos) {
  * @param {object} filtros - { estado, prioridad, areaServicio, categoria }
  * @returns {{ total: number, reportes: object[] }}
  */
-export async function listarReportes(filtros = {}) {
-  const where = {};
+export async function listarReportes (filtros = {}) {
+  const where = {}
 
-  if (filtros.estado) where.estado = filtros.estado;
-  if (filtros.prioridad) where.prioridad = filtros.prioridad;
-  if (filtros.areaServicio) where.areaServicio = filtros.areaServicio;
-  if (filtros.categoria) where.categoria = filtros.categoria;
+  if (filtros.estado) where.estado = filtros.estado
+  if (filtros.prioridad) where.prioridad = filtros.prioridad
+  if (filtros.areaServicio) where.areaServicio = filtros.areaServicio
+  if (filtros.categoria) where.categoria = filtros.categoria
 
   const [total, reportes] = await Promise.all([
     prisma.reporte.count({ where }),
     prisma.reporte.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
-    }),
-  ]);
+      orderBy: { createdAt: 'desc' }
+    })
+  ])
 
-  return { total, reportes };
+  return { total, reportes }
 }
 
 /**
@@ -91,7 +91,7 @@ export async function listarReportes(filtros = {}) {
  * @param {string} codigo - Codigo de seguimiento
  * @returns {object|null} El reporte con historial, o null si no existe
  */
-export async function buscarPorCodigo(codigo) {
+export async function buscarPorCodigo (codigo) {
   const reporte = await prisma.reporte.findUnique({
     where: { codigoSeguimiento: codigo },
     include: {
@@ -100,13 +100,13 @@ export async function buscarPorCodigo(codigo) {
         select: {
           estadoAnterior: true,
           estadoNuevo: true,
-          changedAt: true,
-        },
-      },
-    },
-  });
+          changedAt: true
+        }
+      }
+    }
+  })
 
-  return reporte;
+  return reporte
 }
 
 /**
@@ -114,12 +114,12 @@ export async function buscarPorCodigo(codigo) {
  * @param {string} id - UUID del reporte
  * @returns {object|null}
  */
-export async function buscarPorId(id) {
+export async function buscarPorId (id) {
   const reporte = await prisma.reporte.findUnique({
-    where: { id },
-  });
+    where: { id }
+  })
 
-  return reporte;
+  return reporte
 }
 
 /**
@@ -129,13 +129,13 @@ export async function buscarPorId(id) {
  * @param {string} nuevoEstado - Nuevo valor del enum EstadoReporte
  * @returns {object} El reporte actualizado
  */
-export async function actualizarEstado(id, nuevoEstado) {
+export async function actualizarEstado (id, nuevoEstado) {
   const reporteActual = await prisma.reporte.findUnique({
     where: { id },
-    select: { estado: true },
-  });
+    select: { estado: true }
+  })
 
-  if (!reporteActual) return null;
+  if (!reporteActual) return null
 
   const resultado = await prisma.$transaction(async (tx) => {
     // Registrar en historial
@@ -143,18 +143,18 @@ export async function actualizarEstado(id, nuevoEstado) {
       data: {
         reporteId: id,
         estadoAnterior: reporteActual.estado,
-        estadoNuevo: nuevoEstado,
-      },
-    });
+        estadoNuevo: nuevoEstado
+      }
+    })
 
     // Actualizar el reporte
     const reporteActualizado = await tx.reporte.update({
       where: { id },
-      data: { estado: nuevoEstado },
-    });
+      data: { estado: nuevoEstado }
+    })
 
-    return reporteActualizado;
-  });
+    return reporteActualizado
+  })
 
-  return resultado;
+  return resultado
 }

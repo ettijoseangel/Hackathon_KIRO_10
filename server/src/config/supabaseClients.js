@@ -5,16 +5,16 @@
  *
  * IMPORTANTE: La service_role key NUNCA debe exponerse al frontend.
  */
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.SUPABASE_SECRET_KEY;
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseServiceRoleKey = process.env.SUPABASE_SECRET_KEY
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   console.warn(
     '[supabaseClient] SUPABASE_URL o SUPABASE_SECRET_KEY no configuradas. ' +
     'El cliente de Supabase no estara disponible.'
-  );
+  )
 }
 
 export const supabase = createClient(
@@ -23,7 +23,7 @@ export const supabase = createClient(
   {
     auth: {
       autoRefreshToken: false,
-      persistSession: false,
-    },
+      persistSession: false
+    }
   }
-);
+)

@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server/src:/app/src
+      - /app/node_modules
+    command: npx nodemon --watch src --exec node src/index.js
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+
+  nginx:
+    volumes:
+      - ./client/dist:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"

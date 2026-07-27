@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { FileText, Search, Home, Shield, Plus } from 'lucide-react'
+import { FileText, Search, Home, Shield, Plus, Map } from 'lucide-react'
 
 function Layout() {
   const location = useLocation()
@@ -19,36 +19,43 @@ function Layout() {
             <div className="flex items-center gap-1">
               <Link
                 to="/"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
-                  location.pathname === '/'
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/'
                     ? 'text-blue-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
+                  }`}
               >
                 <Home className="w-4 h-4" />
                 Inicio
               </Link>
               <Link
                 to="/crear-reporte"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
-                  location.pathname === '/crear-reporte'
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/crear-reporte'
                     ? 'border border-blue-600 text-blue-700 bg-blue-50'
                     : 'border border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
+                  }`}
               >
                 <Plus className="w-4 h-4" />
                 Crear Reporte
               </Link>
               <Link
                 to="/mis-reportes"
-                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${
-                  location.pathname === '/mis-reportes'
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/mis-reportes'
                     ? 'text-blue-700'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
+                  }`}
               >
                 <FileText className="w-4 h-4" />
                 Mis Reportes
+              </Link>
+              <Link
+                to="/mapa"
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 ${location.pathname === '/mapa'
+                    ? 'text-blue-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+              >
+                <Map className="w-4 h-4" />
+                Mapa
               </Link>
             </div>
           </div>

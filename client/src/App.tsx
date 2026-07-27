@@ -4,6 +4,7 @@ import Landing from './pages/Landing'
 import ReportForm from './pages/ReportForm'
 import Dashboard from './pages/Dashboard'
 import MyReports from './pages/MyReports'
+import MapaIncidencias from './pages/MapaIncidencias'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="crear-reporte" element={<ReportForm />} />
           <Route path="mis-reportes" element={<MyReports />} />
+          <Route path="mapa" element={<MapaIncidencias />} />
           {/* Dashboard accesible solo por URL directa (para administradores) */}
           <Route path="dashboard" element={<Dashboard />} />
         </Route>

@@ -66,4 +66,4 @@ if (config.env === 'production') {
 // --- Middleware de error global ---
 app.use(errorHandler)
 
-export { httpServer }
+export { httpServer, app }

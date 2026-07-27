@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import request from 'supertest'
 
-import app from '../../app.js'
+import { app } from '../../server.js'
 import * as reporteModel from '../../models/reporte.model.js'
 import * as orientacionModel from '../../models/orientacionIA.model.js'
 import * as iaModule from '../../ia/index.js'

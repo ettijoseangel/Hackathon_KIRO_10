@@ -1,7 +1,22 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Search, WavesHorizontal , UtilityPole, Building2, Phone, BarChart3, Shield } from "lucide-react";
+import { Plus, Search, WavesHorizontal, UtilityPole, Building2, Phone, BarChart3, Shield } from "lucide-react";
+import { listarReportes, type Reporte } from "@/services/reporteService";
 
 export default function Landing() {
+  const [totalReportes, setTotalReportes] = useState<number>(0)
+  const [reportesRecientes, setReportesRecientes] = useState<Reporte[]>([])
+
+  useEffect(() => {
+    async function cargarEstadisticas() {
+      const resultado = await listarReportes()
+      if (resultado.data) {
+        setTotalReportes(resultado.data.total)
+        setReportesRecientes(resultado.data.reportes.slice(0, 5))
+      }
+    }
+    cargarEstadisticas()
+  }, [])
   return (
     <div className="min-h-screen bg-[#F1F5F9] relative">
       {/* Hero Section */}
@@ -50,16 +65,23 @@ export default function Landing() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between max-w-2xl mx-auto text-center">
             <div>
-              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">2,847</p>
+              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">{totalReportes.toLocaleString()}</p>
               <p className="text-[#76748E] text-xs font-medium mt-1.5">Reportes recibidos</p>
             </div>
             <div>
-              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">89%</p>
-              <p className="text-[#76748E] text-xs font-medium mt-1.5">Resueltos este mes</p>
+              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">
+                {reportesRecientes.length > 0
+                  ? `${Math.round((reportesRecientes.filter(r => r.estado === 'RESUELTO').length / reportesRecientes.length) * 100)}%`
+                  : '0%'
+                }
+              </p>
+              <p className="text-[#76748E] text-xs font-medium mt-1.5">Resueltos</p>
             </div>
             <div>
-              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">48h</p>
-              <p className="text-[#76748E] text-xs font-medium mt-1.5">Tiempo de respuesta</p>
+              <p className="text-xl md:text-2xl font-bold text-[#1D4ED8]">
+                {reportesRecientes.filter(r => r.estado === 'PENDIENTE' || r.estado === 'EN_PROCESO').length}
+              </p>
+              <p className="text-[#76748E] text-xs font-medium mt-1.5">Activos ahora</p>
             </div>
           </div>
         </div>
@@ -68,7 +90,7 @@ export default function Landing() {
       {/* Áreas de Servicio */}
       <section className="container mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Áreas de Servicio</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Áreas de Servicio</h2>
           <p className="text-gray-500 text-lg">Selecciona el area correspondiente a tu problema</p>
         </div>
 
@@ -77,7 +99,7 @@ export default function Landing() {
           <div className="bg-white rounded-2xl border-2 border-blue-100 p-6 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-12 h-12  flex items-center justify-center ">
-                <WavesHorizontal  className="w-6 h-6 text-blue-600" />
+                <WavesHorizontal className="w-6 h-6 text-blue-600" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Agua</h3>
@@ -168,6 +190,52 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Reportes Recientes */}
+      {reportesRecientes.length > 0 && (
+        <section className="container mx-auto px-6 pb-12">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900">Ultimos reportes ciudadanos</h3>
+              <Link to="/mis-reportes" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+                Ver todos →
+              </Link>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-5 py-3">Folio</th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-5 py-3">Area</th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-5 py-3">Titulo</th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-5 py-3">Estatus</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {reportesRecientes.map((r) => (
+                    <tr key={r.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-5 py-3">
+                        <span className="text-sm font-semibold text-blue-600">{r.codigoSeguimiento}</span>
+                      </td>
+                      <td className="px-5 py-3 text-sm text-gray-700">{r.areaServicio}</td>
+                      <td className="px-5 py-3 text-sm text-gray-700 truncate max-w-[200px]">{r.titulo}</td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${r.estado === 'RESUELTO' ? 'bg-green-50 text-green-700' :
+                            r.estado === 'EN_PROCESO' ? 'bg-blue-50 text-blue-700' :
+                              r.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-700' :
+                                'bg-gray-50 text-gray-700'
+                          }`}>
+                          {r.estado === 'EN_PROCESO' ? 'En proceso' : r.estado === 'PENDIENTE' ? 'Pendiente' : r.estado === 'RESUELTO' ? 'Resuelto' : r.estado}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Emergencia urgente */}
       <section className="container mx-auto px-6 pb-16">
         <div className="bg-gray-100 rounded-2xl p-10 md:p-14 text-center max-w-4xl mx-auto border border-gray-200">
@@ -186,7 +254,7 @@ export default function Landing() {
         </div>
       </section>
 
-     
+
 
       {/* Botón Admin flotante */}
       <Link

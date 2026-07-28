@@ -110,7 +110,7 @@ export default function Landing() {
       {/* ====================================================== */}
 
       <nav className="
-        bg-gradient-to-r
+        bg-linear-to-r
         from-indigo-700
         to-blue-700
         text-white
@@ -138,7 +138,7 @@ export default function Landing() {
                 flex
                 items-center
                 gap-2.5
-                flex-shrink-0
+                shrink-0
               "
             >
 
@@ -263,7 +263,7 @@ export default function Landing() {
                 rounded-lg
                 hover:bg-indigo-50
                 transition-colors
-                flex-shrink-0
+                shrink-0
               "
             >
               Crear reporte
@@ -286,7 +286,7 @@ export default function Landing() {
           grid
           grid-cols-1
           lg:grid-cols-2
-          min-h-[560px]
+          min-h-140
         ">
 
 
@@ -549,9 +549,9 @@ export default function Landing() {
 
           <div className="
             relative
-            min-h-[560px]
+            min-h-140
             overflow-hidden
-            bg-gradient-to-br
+            bg-linear-to-br
             from-indigo-600
             via-indigo-700
             to-indigo-950
@@ -623,7 +623,7 @@ export default function Landing() {
 
                 <div className="
                   absolute
-                  inset-[-10px]
+                  -inset-2.5
                   rounded-full
                   border
                   border-white/20
@@ -706,7 +706,7 @@ export default function Landing() {
                     h-2
                     rounded-full
                     bg-emerald-400
-                    flex-shrink-0
+                    shrink-0
                   " />
 
 
@@ -754,7 +754,7 @@ export default function Landing() {
                     h-2
                     rounded-full
                     bg-cyan-400
-                    flex-shrink-0
+                    shrink-0
                   " />
 
 
@@ -802,7 +802,7 @@ export default function Landing() {
                     h-2
                     rounded-full
                     bg-amber-400
-                    flex-shrink-0
+                    shrink-0
                   " />
 
 
@@ -888,7 +888,7 @@ export default function Landing() {
               <div className="
                 w-14
                 h-14
-                flex-shrink-0
+                shrink-0
                 bg-green-50
                 rounded-2xl
                 flex
@@ -958,7 +958,7 @@ export default function Landing() {
               <div className="
                 w-14
                 h-14
-                flex-shrink-0
+                shrink-0
                 bg-blue-50
                 rounded-2xl
                 flex
@@ -1028,7 +1028,7 @@ export default function Landing() {
               <div className="
                 w-14
                 h-14
-                flex-shrink-0
+                shrink-0
                 bg-indigo-50
                 rounded-2xl
                 flex
@@ -2122,7 +2122,7 @@ export default function Landing() {
       ">
 
         <div className="
-          bg-gradient-to-r
+          bg-linear-to-r
           from-indigo-700
           to-blue-700
           rounded-2xl

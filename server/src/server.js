@@ -54,14 +54,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/reportes', reportesRouter)
 app.use('/api/v1', guiaIARouter)
 
-// --- Servir frontend en produccion ---
-if (config.env === 'production') {
-    const distPath = path.join(__dirname, '../../client/dist')
-    app.use(express.static(distPath))
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(distPath, 'index.html'))
-    })
-}
+
 
 // --- Middleware de error global ---
 app.use(errorHandler)

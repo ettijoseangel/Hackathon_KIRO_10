@@ -166,7 +166,7 @@ export default function MapaIncidencias() {
           {/* Lista de reportes en sidebar */}
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Reportes ({reportesFiltrados.length})</p>
-            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+            <div className="space-y-2 max-h-100 overflow-y-auto">
               {reportesFiltrados.map(r => (
                 <div key={r.id} className="p-2.5 bg-gray-50 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -228,7 +228,7 @@ export default function MapaIncidencias() {
                   icon={AREA_ICONS[r.areaServicio] || AREA_ICONS.OTRO}
                 >
                   <Popup>
-                    <div className="min-w-[200px]">
+                    <div className="min-w-50">
                       <div className="flex items-center gap-1.5 mb-1">
                         <span className="text-xs font-bold text-blue-600">{r.codigoSeguimiento}</span>
                         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${

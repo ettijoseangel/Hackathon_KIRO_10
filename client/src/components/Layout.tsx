@@ -14,7 +14,7 @@ function Layout() {
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                 <MapPin className="w-4 h-4" />
               </div>
-              <span className="text-sm font-bold">Reportes Ciudadanos</span>
+              <span className="text-sm font-bold">Reporte Cívico</span>
             </Link>
 
             {/* Links de navegación */}

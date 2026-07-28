@@ -165,7 +165,7 @@ export default function Landing() {
                   font-bold
                   leading-none
                 ">
-                  Reportes Ciudadanos
+                  Reporte Cívico
                 </span>
 
                 <span className="

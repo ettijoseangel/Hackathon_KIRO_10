@@ -1,6 +1,6 @@
-# 🏙️ Reportes Ciudadanos - Aplicación Web de Reportes Comunitarios
+# 🏙️ Reportes Ciudadanos - Plataforma de Reportes Comunitarios
 
-> 👩🏻‍💻 Proyecto realizado por Biters (Equipo 10) en el Hackathon Kiro by Código Facilito.
+> 👩🏻‍💻 Proyecto realizado por **Biters (Equipo 10)** en el Hackathon Kiro by Código Facilito.
 
 [![React](https://img.shields.io/badge/React-19.2-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.1-purple.svg)](https://vitejs.dev/)
@@ -11,231 +11,182 @@
 
 ---
 
-## 👩🏻‍💻 Equipo
-
-Este proyecto fue realizado por:
-
-- José Ángel Zavaleta Ruíz.
-- David de Jesús Chavarría Hernández.
-- Michel Benzant.
-- Julián Hernández Vital.
-- Luis Arturo Villarreal López.
-
----
-
-## 📖 Descripción del Proyecto
+##  Descripción del Proyecto
 
 **Reportes Ciudadanos** es una aplicación web para reportar problemas comunitarios (baches, fugas de agua, fallas eléctricas, basura, etc.) y dar seguimiento mediante un código único. El sistema utiliza **inteligencia artificial** para generar orientación institucional personalizada (institución responsable, medios de contacto, próximos pasos). La plataforma es **adaptable a cualquier municipio**, utilizando datos de Monterrey, Nuevo León como plantilla por defecto.
 
-### Características Principales
+---
 
-✅ **Para Ciudadanos:**
-- Crear reportes con ubicación GPS automática o dirección manual
-- Mapa interactivo con **Leaflet + OpenStreetMap** (sin API key)
-- Adjuntar evidencia fotográfica (hasta 5MB)
-- Consultar estado del reporte con código de seguimiento (formato: REP-XXX)
-- Guía de orientación con IA: institución responsable, medios de contacto, próximos pasos
-- Interfaz intuitiva y responsiva (mobile-first)
+## 👥 Equipo
 
+Este proyecto fue realizado por:
 
-✅ **Técnicas:**
-- Arquitectura cliente-servidor con contenedores Docker
-- API REST con validación robusta
-- Base de datos PostgreSQL gestionada con Prisma ORM
-- Orientación institucional con IA (proveedor configurable: Claude, Gemini, etc.)
-- Despliegue en AWS EC2 con Nginx y Docker Compose
-- RLS (Row Level Security) activo en Supabase
+- **José Ángel Zavaleta Ruíz**
+- **David de Jesús Chavarría Hernández**
+- **Michel Benzant**
+- **Julián Hernández Vital**
+- **Luis Arturo Villarreal López**
 
 ---
 
-## 🏗️ Arquitectura del Proyecto
+## ✨ Características Principales
+
+### Para Ciudadanos
+- ✅ Crear reportes con ubicación GPS automática o dirección manual
+- ✅ Mapa interactivo con **Leaflet + OpenStreetMap** (sin API key, gratuito)
+- ✅ Adjuntar evidencia fotográfica (hasta 5MB)
+- ✅ Consultar estado del reporte con código de seguimiento (formato: **REP-XXX**)
+- ✅ **Guía de orientación con IA**: institución responsable, medios de contacto, próximos pasos
+- ✅ Interfaz intuitiva y responsiva (mobile-first)
+
+### Técnicas
+- ✅ Arquitectura cliente-servidor con contenedores Docker
+- ✅ API REST con validación robusta
+- ✅ Base de datos PostgreSQL gestionada con Prisma ORM
+- ✅ Orientación institucional con IA (proveedor configurable: Claude, Gemini, etc.)
+- ✅ Despliegue en AWS EC2 con Nginx y Docker Compose
+- ✅ RLS (Row Level Security) activo en Supabase
+
+---
+
+## 🏗️ Arquitectura del Monorepo
 
 Este es un **monorepo** que contiene frontend, backend, y configuración de despliegue:
 
 ```
 proyecto/
-├── client/                    # Frontend React + Vite + TypeScript
+├── client/                    # 🎨 Frontend React + Vite + TypeScript
 │   ├── src/
 │   │   ├── components/        # Componentes reutilizables (UI, Layout)
 │   │   ├── pages/             # Páginas (Landing, ReportForm, Mapa)
-│   │   ├── services/          # Comunicación HTTP (apiClient, reporteService)
-│   │   ├── types/             # Interfaces TypeScript
-│   │   └── lib/               # Utilidades (cn, helpers)
-│   ├── public/                # Assets estáticos
-│   └── package.json
+│   │   ├── services/          # Comunicación HTTP con backend
+│   │   └── types/             # Interfaces TypeScript
+│   └── README.md              # 📄 Documentación completa del frontend
 │
-├── server/                    # Backend Express + Prisma + Supabase
+├── server/                    # ⚙️ Backend Express + Prisma + Supabase
 │   ├── src/
 │   │   ├── routes/            # Definición de endpoints RESTful
 │   │   ├── controllers/       # Lógica de negocio
 │   │   ├── services/          # Servicios (IA, orientación, CRUD)
-│   │   ├── config/            # Configuración (Supabase, logger)
-│   │   ├── middleware/        # Validación, rate limiting, seguridad
-│   │   └── db/                # Cliente Prisma
+│   │   └── middleware/        # Validación, rate limiting, seguridad
 │   ├── prisma/
 │   │   ├── schema.prisma      # Modelos de base de datos
 │   │   └── migrations/        # Migraciones de BD
-│   ├── .env.example           # Plantilla de variables de entorno
-│   └── package.json
+│   └── README.md              # 📄 Documentación completa del backend
 │
-├── nginx/                     # Reverse proxy + servir estáticos
-│   ├── Dockerfile
-│   └── conf.d/default.conf
-│
-├── deploy/                    # Scripts de despliegue
-│   └── deploy.sh
-│
-├── docker-compose.yml         # Configuración de producción (EC2)
-├── docker-compose.override.yml # Hot-reload para desarrollo local
-├── .env.example               # Plantilla de variables globales
-└── README.md                  # Este archivo
+├── nginx/                     # 🌐 Reverse proxy + servir estáticos
+├── deploy/                    # 🚀 Scripts de despliegue
+├── docker-compose.yml         # 🐳 Configuración de producción
+└── README.md                  # 📄 Este archivo (overview general)
 ```
 
 ---
 
-## 🚀 Stack Tecnológico
+## 📚 Documentación por Módulo
 
-### Frontend (`client/`)
-- **Core:** React 19.2 + Vite 8.1 + TypeScript 6.0
-- **Estilos:** Tailwind CSS 4.3 (mobile-first, paleta violeta/índigo)
-- **UI Components:** shadcn/ui + Radix UI (accesibilidad)
-- **Routing:** React Router DOM 7.11
-- **Mapas:** Leaflet + react-leaflet + OpenStreetMap (sin API key)
-- **Geocoding:** Nominatim (OpenStreetMap, gratuito)
-- **HTTP:** fetch nativo centralizado en servicios
-- **Testing:** Vitest + Testing Library + jsdom
-- **Linting:** ESLint con plugins para React
+### 🎨 Frontend (React + Vite)
+**[👉 Ver documentación completa del Frontend →](./client/README.md)**
 
-### Backend (`server/`)
-- **Runtime:** Node.js 20 (Alpine)
-- **Framework:** Express 5.2 (API REST)
-- **ORM:** Prisma 6.9 (PostgreSQL)
-- **Base de Datos:** Supabase (PostgreSQL gestionado, con RLS)
-- **IA:** Proveedor configurable mediante variable de entorno (Claude de Anthropic, Gemini de Google, etc.)
-- **Seguridad:** Helmet, express-rate-limit, xss, validación robusta
-- **Logging:** Winston (logs estructurados)
-- **Testing:** Vitest + Supertest (integración de endpoints)
-- **Docs API:** Swagger UI (OpenAPI 3.0)
+- Stack técnico (React 19, Vite, TypeScript, Tailwind)
+- Instalación y configuración
+- Estructura de componentes y páginas
+- Integración con mapas (Leaflet + OpenStreetMap)
+- Sistema de diseño y paleta de colores
+- Testing con Vitest
+- Troubleshooting
 
-### Infraestructura y Despliegue
-- **Contenedores:** Docker + Docker Compose
-- **Reverse Proxy:** Nginx 1.27 (Alpine)
-- **Cloud:** AWS EC2 (t3.small, Ubuntu 24.04 LTS)
-- **Persistencia:** Supabase (servicio externo, no corre en la EC2)
-- **CI/CD:** GitHub Actions (SSH deploy automático)
+### ⚙️ Backend (Express + Prisma)
+**[👉 Ver documentación completa del Backend →](./server/README.md)**
 
-### Herramientas de Desarrollo
-- **Linting:** ESLint + Standard.js
-- **Code Quality:** Conventional Commits en español
-- **Hot-reload:** Nodemon (backend) + Vite HMR (frontend)
-- **Git Hooks:** Pre-commit para linting
+- Stack técnico (Express 5, Prisma 6, Supabase)
+- Instalación y configuración
+- API Endpoints completos
+- Modelo de datos (Prisma schema)
+- Integración con IA (Claude, Gemini)
+- Testing con Vitest + Supertest
+- Seguridad y buenas prácticas
+- Troubleshooting
 
 ---
 
-## 📋 Prerequisitos
+## 🚀 Stack Tecnológico (Resumen)
 
-Antes de comenzar, asegúrate de tener instalado:
+### Frontend
+- **React 19.2** + **Vite 8.1** + **TypeScript 6.0**
+- **Tailwind CSS 4.3** + **shadcn/ui** + **Radix UI**
+- **Leaflet** + **react-leaflet** + **OpenStreetMap**
+- **React Router DOM 7.11**
+- **Vitest** + **Testing Library**
 
-- **Node.js** v18 o superior
-- **npm** v9 o superior
-- **Git** para control de versiones
-- **Docker** + **Docker Compose** (opcional, para despliegue local containerizado)
-- **Editor de código** (VS Code recomendado con extensión Prisma)
+### Backend
+- **Node.js 20** + **Express 5.2**
+- **Prisma 6.9** + **PostgreSQL (Supabase)**
+- **IA Configurable**: Claude (Anthropic) o Gemini (Google)
+- **Helmet** + **express-rate-limit** + **xss**
+- **Winston** (logging) + **Swagger UI** (docs)
+- **Vitest** + **Supertest**
+
+### Infraestructura
+- **Docker** + **Docker Compose**
+- **Nginx 1.27** (reverse proxy)
+- **AWS EC2** (t3.small, Ubuntu 24.04 LTS)
+- **GitHub Actions** (CI/CD)
 
 ---
 
-## ⚙️ Instalación y Configuración
+## ⚙️ Quick Start
 
-### 1️⃣ Clonar el Repositorio
+### Prerequisitos
+
+- Node.js v18+
+- npm v9+
+- Docker + Docker Compose (opcional)
+- Cuenta de Supabase
+- API Key de proveedor de IA (Claude o Gemini)
+
+### Instalación Rápida
 
 ```bash
+# 1. Clonar repositorio
 git clone <url-del-repositorio>
 cd frontend
-```
 
-### 2️⃣ Instalar Dependencias
-
-#### Frontend
-```bash
+# 2. Instalar dependencias del frontend
 cd client
 npm install
-```
 
-#### Backend
-```bash
+# 3. Instalar dependencias del backend
 cd ../server
 npm install
-```
 
-### 3️⃣ Configurar Variables de Entorno
-
-#### Backend (`server/.env`)
-
-Copia el archivo de ejemplo y edítalo con tus credenciales:
-
-```bash
-cd server
+# 4. Configurar variables de entorno
 cp .env.example .env
-```
+# Editar server/.env con tus credenciales
 
-Contenido de `server/.env`:
+# 5. Configurar base de datos
+npm run db:generate
+npm run db:migrate
 
-```env
-# Server
-NODE_ENV=development
-PORT=3001
-
-# Supabase
-SUPABASE_URL=https://xxxx.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_aqui
-
-# IA (orientación institucional)
-# Proveedor configurable: claude (Anthropic) o gemini (Google)
-ANTHROPIC_API_KEY=sk-ant-xxxx        # Si usas Claude
-# GEMINI_API_KEY=tu-api-key-aqui     # Si usas Gemini (versión gratuita disponible)
-
-# Frontend (CORS)
-CLIENT_ORIGIN=http://localhost:5173
-
-# Database (Prisma)
-DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
-```
-
-> ⚠️ **Seguridad:** Nunca subas archivos `.env` a Git. Ya están incluidos en `.gitignore`.
-
-### 4️⃣ Configurar Base de Datos (Prisma)
-
-```bash
+# 6. Iniciar en modo desarrollo
+# Terminal 1 - Backend
 cd server
-npm run db:generate    # Genera el cliente de Prisma
-npm run db:migrate     # Ejecuta migraciones pendientes
+npm run dev
+
+# Terminal 2 - Frontend
+cd client
+npm run dev
 ```
+
+**Acceder a:**
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3001`
+- API Docs: `http://localhost:3001/api-docs`
 
 ---
 
-## 🎮 Modo de Uso
+## 🐳 Despliegue con Docker
 
-### Desarrollo Local (Modo Manual)
-
-#### Opción 1: Ejecutar Frontend y Backend por Separado
-
-**Terminal 1 - Backend:**
-```bash
-cd server
-npm run dev
-```
-Backend en `http://localhost:3001` (con nodemon, hot-reload)
-
-**Terminal 2 - Frontend:**
-```bash
-cd client
-npm run dev
-```
-Frontend en `http://localhost:5173` (con Vite HMR)
-
-### Desarrollo Local (Modo Docker)
-
-Usa `docker-compose.override.yml` para hot-reload automático:
+### Desarrollo Local (con hot-reload)
 
 ```bash
 # Desde la raíz del proyecto
@@ -246,50 +197,10 @@ docker compose up --build
 - Backend (directo): `http://localhost:3001`
 - Los cambios en `server/src` recargan automáticamente con nodemon
 
-### Comandos Útiles (Backend)
-
-```bash
-cd server
-
-# Base de datos
-npm run db:studio       # Abrir Prisma Studio (GUI de BD)
-npm run db:migrate      # Crear migración
-npm run db:reset        # Resetear BD (desarrollo)
-npm run db:deploy       # Aplicar migraciones (producción)
-
-# Testing
-npm test                # Ejecutar tests una vez
-npm run test:watch      # Modo watch
-npm run test:coverage   # Reporte de cobertura
-
-# Linting
-npm run lint:fix        # Corregir errores de estilo
-```
-
-### Comandos Útiles (Frontend)
-
-```bash
-cd client
-
-# Testing
-npm test                # Ejecutar tests
-npm run test:watch      # Modo watch
-
-# Build
-npm run build           # Compilar para producción
-npm run preview         # Preview del build
-```
-
----
-
-## 🐳 Despliegue con Docker
-
 ### Producción (AWS EC2)
 
-El proyecto se despliega con Docker Compose en una instancia EC2:
-
 ```bash
-# En la instancia EC2 (una sola vez)
+# En la instancia EC2
 git clone <repo> /home/ubuntu/app
 cd /home/ubuntu/app
 
@@ -300,109 +211,137 @@ cd client && npm ci && npm run build && cd ..
 docker compose up -d --build
 ```
 
-La aplicación queda accesible en `http://<EC2_PUBLIC_IP>`.
-
-#### Arquitectura de Despliegue
-
+**Arquitectura de Despliegue:**
 ```
 Internet → EC2 (puerto 80) → Nginx (contenedor)
-                                ├── → /api → Express (contenedor)
-                                └── → / → Frontend estático (client/dist)
+                                ├── /api → Express (contenedor)
+                                └── /    → Frontend estático (client/dist)
                                 
 Express → Supabase (servicio externo, HTTPS)
 ```
 
-### Script de Deploy Automatizado
-
-```bash
-# En la EC2
-bash /home/ubuntu/app/deploy/deploy.sh
-```
-
-El script:
-1. Hace `git pull`
-2. Recompila el frontend
-3. Reconstruye y reinicia contenedores
-4. Limpia imágenes viejas
-
 ### CI/CD con GitHub Actions
 
-El proyecto incluye workflow de GitHub Actions (`.github/workflows/deploy.yml`) que:
+El proyecto incluye workflow de GitHub Actions (`.github/workflows/deploy.yml`):
 - Se dispara en push a `main`
 - Se conecta vía SSH a la EC2
-- Ejecuta `deploy.sh` automáticamente
+- Ejecuta `deploy/deploy.sh` automáticamente
 
-Configura estos secrets en GitHub:
+**Secrets requeridos en GitHub:**
 - `EC2_HOST` — IP pública de la EC2
 - `EC2_USER` — Usuario SSH (ubuntu)
 - `EC2_SSH_KEY` — Clave privada SSH
 
 ---
 
-## 📁 Estructura de Rutas (API REST)
+## 🤖 Integración con IA
 
-| Método | Endpoint                     | Descripción                                | Auth |
-|--------|------------------------------|--------------------------------------------|------|
-| POST   | `/api/reportes`              | Crear reporte con orientación IA           | No   |
-| GET    | `/api/reportes`              | Listar reportes (con filtros)              | No   |
-| GET    | `/api/reportes/:codigo`      | Buscar por código de seguimiento           | No   |
-| PATCH  | `/api/reportes/:id/estado`   | Actualizar estado de un reporte            | No   |
-| GET    | `/api/v1/reportes/:id/guia-ia` | Obtener orientación IA guardada          | No   |
-| GET    | `/api-docs`                  | Documentación Swagger UI                   | No   |
-| GET    | `/health`                    | Health check del servidor                  | No   |
+### Proveedor de IA Configurable
+
+El backend soporta múltiples proveedores de IA mediante variables de entorno:
+
+| Proveedor | Variable de Entorno   | Modelo                | Costo          |
+|-----------|-----------------------|-----------------------|----------------|
+| Claude    | `ANTHROPIC_API_KEY`   | Claude 3.5 Sonnet     | Pago por uso   |
+| Gemini    | `GEMINI_API_KEY`      | Gemini 1.5 Flash/Pro  | Versión gratis |
+
+### Funcionalidades
+
+#### ✅ Guía de Orientación Institucional (Activa)
+
+Al crear un reporte, el sistema automáticamente genera orientación personalizada:
+- Institución responsable (municipal, estatal, federal)
+- Medios de contacto (teléfono, email, horarios)
+- Próximos pasos recomendados
+- Información adicional si es necesaria
+
+**Endpoint:** `GET /api/v1/reportes/:id/guia-ia`
+
+#### ⏸️ Clasificación Automática de Prioridad (Temporalmente Desactivada)
+
+La funcionalidad de clasificación automática de prioridad (BAJA, MEDIA, ALTA, URGENTE) fue desactivada temporalmente del flujo de creación de reportes debido a ajustes técnicos.
+
+**Estado actual:**
+- El código existe pero no está integrado
+- Los reportes se crean con prioridad `MEDIA` por defecto
+- Campos reservados para futura reactivación
+
+**[Ver más detalles en la documentación del backend →](./server/README.md#integración-con-ia)**
 
 ---
 
-## 🗺️ Estructura de Rutas (Frontend)
+## 📡 API Endpoints (Resumen)
 
-| Ruta            | Descripción                              | Acceso  |
-|-----------------|------------------------------------------|---------|
-| `/`             | Landing page con call-to-action          | Público |
-| `/reportar`     | Formulario de creación de reportes       | Público |
-| `/mis-reportes` | Consulta de reportes por código          | Público |
-| `/mapa`         | Mapa interactivo con todos los reportes  | Público |
+| Método | Endpoint                       | Descripción                           |
+|--------|--------------------------------|---------------------------------------|
+| POST   | `/api/reportes`                | Crear reporte con orientación IA      |
+| GET    | `/api/reportes`                | Listar reportes (con filtros)         |
+| GET    | `/api/reportes/:codigo`        | Buscar por código de seguimiento      |
+| PATCH  | `/api/reportes/:id/estado`     | Actualizar estado de un reporte       |
+| GET    | `/api/v1/reportes/:id/guia-ia` | Obtener orientación IA                |
+| GET    | `/health`                      | Health check del servidor             |
+| GET    | `/api-docs`                    | Documentación Swagger UI              |
 
-
----
-
-## 🎨 Sistema de Diseño
-
-### Paleta de Colores (Variante B de Figma)
-
-- **Primario:** `#6366F1` (Índigo/Violeta)
-- **Secundario:** `#4F46E5` (Índigo oscuro)
-- **Fondo:** `slate-50` / `white`
-- **Texto:** `slate-900` (alto contraste)
-
-### Componentes UI
-
-- **Cards:** Bordes redondeados (`rounded-xl`), sombras suaves
-- **Buttons:** Gradientes según función (GPS: verde, Archivo: morado, Eliminar: rojo)
-- **Typography:** Sans-serif limpia, jerarquía visual clara
-- **Mobile-first:** Diseño responsivo con breakpoints de Tailwind
+**[Ver documentación completa de la API →](./server/README.md#api-endpoints)**
 
 ---
 
 ## 🧪 Testing
 
+### Comandos de Testing
+
+**Frontend:**
+```bash
+cd client
+npm test              # Ejecutar tests una vez
+npm run test:watch    # Modo watch
+```
+
+**Backend:**
+```bash
+cd server
+npm test              # Ejecutar tests una vez
+npm run test:watch    # Modo watch
+npm run test:coverage # Reporte de cobertura
+```
+
 ### Estrategia de Testing
 
 El proyecto usa **Example-Based Testing** con Vitest:
 
-#### Frontend
-- ✅ **Unit Tests:** Validaciones, helpers, utilidades
-- ✅ **Component Tests:** Interacciones de usuario
-- ✅ **Integration Tests:** Flujos completos (crear reporte, buscar por código)
+- **Frontend**: Unit tests, component tests, integration tests
+- **Backend**: Unit tests, integration tests, database tests
 
-#### Backend
-- ✅ **Unit Tests:** Servicios individuales (iaClassifier, orientacionIA)
-- ✅ **Integration Tests:** Endpoints completos con Supertest
-- ✅ **Database Tests:** Operaciones CRUD con base de datos de prueba
+**Cobertura Objetivo:**
+- Frontend: >80% en componentes con lógica
+- Backend: 100% en flujos críticos
 
-### Cobertura Objetivo
+**[Ver guías completas de testing →](./client/README.md#testing)** | **[Backend →](./server/README.md#testing)**
 
-- **Frontend:** >80% en componentes con lógica
-- **Backend:** 100% en flujos críticos (crear reporte, actualizar estado)
+---
+
+## 🔒 Seguridad
+
+### Prácticas Implementadas
+
+- 🔐 **Service Role Key** de Supabase solo en backend (nunca en frontend)
+- 🛡️ **RLS activo** en Supabase (Row Level Security)
+- 🚫 **No se exponen stack traces** al cliente (solo mensajes genéricos)
+- ✅ **Validación doble**: Cliente (UX) + Servidor (seguridad)
+- ✅ **Rate Limiting**: express-rate-limit en endpoints públicos
+- ✅ **XSS Protection**: Sanitización de inputs con xss
+- ✅ **Helmet**: Headers de seguridad HTTP
+- ✅ **Contenedor no-root**: Usuario `node` en Dockerfile
+- ✅ **CORS restringido**: Solo origin configurado en `CLIENT_ORIGIN`
+
+### Manejo de Secretos
+
+- ❌ **NO subir** archivos `.env` a Git (ya incluidos en `.gitignore`)
+- ✅ **Usar** `.env.example` como plantilla
+- ✅ **Inyectar** variables vía Docker Compose en producción
+- ✅ **Rotar** claves periódicamente (Supabase, IA)
+
+**[Ver más sobre seguridad →](./server/README.md#seguridad)**
 
 ---
 
@@ -425,59 +364,56 @@ test: agregar tests de integración para POST /api/reportes
 
 ### Reglas de Calidad de Código
 
-- ✅ **SOLID:** Principios de diseño orientado a objetos
-- ✅ **DRY:** No repetir lógica — extraer a funciones reutilizables
-- ✅ **Clean Code:** Nombres descriptivos, funciones pequeñas
-- ✅ **Testing First:** Cada feature incluye tests
-- ✅ **Security First:** Validación en cliente Y servidor
-
-### Reglas Anti-Alucinación
-
-- ❌ **NUNCA** generar código sin leer archivos involucrados
-- ❌ **NUNCA** inventar endpoints o funciones que no existen
-- ❌ **NUNCA** generar múltiples features en un solo paso
-- ✅ **SIEMPRE** verificar que el código compila antes de declarar completo
-- ✅ **SIEMPRE** preguntar al usuario si algo no está claro
+- ✅ **SOLID**: Principios de diseño orientado a objetos
+- ✅ **DRY**: No repetir lógica — extraer a funciones reutilizables
+- ✅ **Clean Code**: Nombres descriptivos, funciones pequeñas
+- ✅ **Testing First**: Cada feature incluye tests
+- ✅ **Security First**: Validación en cliente Y servidor
 
 ### Regla de Avance Estricta (Backend)
 
 **NO se puede avanzar al siguiente módulo/endpoint hasta que:**
+
 1. ✅ El módulo actual haya sido validado manualmente (Postman u otra herramienta)
 2. ✅ Los tests del módulo actual estén escritos y pasen correctamente
 
 ---
 
-## 🔒 Seguridad
+## 🤝 Contribución
 
-### Prácticas Implementadas
+### Branching Strategy
 
-- 🔐 **Service Role Key** de Supabase solo en backend (nunca en frontend)
-- 🛡️ **RLS activo** en Supabase (Row Level Security)
-- 🚫 **No se exponen stack traces** al cliente (solo mensajes genéricos)
-- ✅ **Validación doble:** Cliente (UX) + Servidor (seguridad)
-- ✅ **Rate Limiting:** express-rate-limit en endpoints públicos
-- ✅ **XSS Protection:** Sanitización de inputs con xss
-- ✅ **Helmet:** Headers de seguridad HTTP
-- ✅ **Contenedor no-root:** Usuario `node` en Dockerfile (no root)
-- ✅ **CORS restringido:** Solo origin configurado en CLIENT_ORIGIN
+- **Features**: `feature/<nombre-corto>`
+- **Fixes**: `fix/<nombre-corto>`
+- **Hotfixes**: `hotfix/<nombre-corto>`
+- **Release**: `release/<version>`
 
-### Manejo de Secretos
+**Regla:** Nunca push directo a `main` sin code review.
 
-- ❌ **NO subir** archivos `.env` a Git
-- ✅ **Usar** `.env.example` como plantilla
-- ✅ **Inyectar** variables vía Docker Compose en producción
-- ✅ **Rotar** claves periódicamente (Supabase, Anthropic)
+### Workflow de Contribución
+
+1. **Crear branch** desde `main`
+2. **Implementar cambios** con commits atómicos
+3. **Ejecutar tests** antes de push
+4. **Push y crear Pull Request**
+5. **Code Review** por al menos 1 miembro del equipo
+6. **Merge a `main`** después de aprobación
 
 ---
 
 ## 📚 Documentación Adicional
 
-### Documentos de Spec (Metodología Kiro)
+### Documentación por Módulo
 
-- [`.kiro/specs/reportes/requirements.md`](.kiro/specs/reportes/requirements.md) - Requerimientos funcionales detallados (EARS)
+- 📄 **[Frontend (React + Vite)](./client/README.md)** - Documentación completa del frontend
+- 📄 **[Backend (Express + Prisma)](./server/README.md)** - Documentación completa del backend
+
+### Specs del Proyecto (Metodología Kiro)
+
+- [`.kiro/specs/reportes/requirements.md`](.kiro/specs/reportes/requirements.md) - Requerimientos funcionales (EARS)
 - [`.kiro/specs/reportes/design.md`](.kiro/specs/reportes/design.md) - Diseño técnico del frontend
-- [`.kiro/specs/reportes/tasks.md`](.kiro/specs/reportes/tasks.md) - Plan de implementación con grafo de dependencias
-- [`.kiro/specs/backend/design.md`](.kiro/specs/backend/design.md) - Diseño técnico del backend + infraestructura
+- [`.kiro/specs/reportes/tasks.md`](.kiro/specs/reportes/tasks.md) - Plan de implementación
+- [`.kiro/specs/backend/design.md`](.kiro/specs/backend/design.md) - Diseño técnico del backend
 - [`.kiro/specs/integracion-frontend/`](.kiro/specs/integracion-frontend/) - Integración frontend-backend
 
 ### Reglas de Trabajo (Steering Files)
@@ -486,166 +422,38 @@ test: agregar tests de integración para POST /api/reportes
 - [`.kiro/steering/frontend-rules.md`](.kiro/steering/frontend-rules.md) - Reglas específicas del frontend
 - [`.kiro/steering/backend-rules.md`](.kiro/steering/backend-rules.md) - Reglas específicas del backend
 
-### Documentación de API
-
-- **Swagger UI:** `http://localhost:3001/api-docs` (en desarrollo)
-- **OpenAPI Spec:** Generada automáticamente con swagger-jsdoc
-
 ---
 
-## 🤝 Contribución
+## 🛠️ Troubleshooting (Problemas Comunes)
 
-### Branching Strategy
-
-- **Features:** `feature/<nombre-corto>`
-- **Fixes:** `fix/<nombre-corto>`
-- **Hotfixes:** `hotfix/<nombre-corto>`
-- **Release:** `release/<version>`
-
-**Regla:** Nunca push directo a `main` sin code review.
-
-### Workflow de Contribución
-
-1. **Crear branch** desde `main`
-   ```bash
-   git checkout -b feature/mi-feature
-   ```
-
-2. **Implementar cambios** con commits atómicos
-   ```bash
-   git add src/componente.tsx
-   git commit -m "feat: agregar componente de notificaciones"
-   ```
-
-3. **Ejecutar tests** antes de push
-   ```bash
-   npm test
-   npm run lint:fix
-   ```
-
-4. **Push y crear Pull Request**
-   ```bash
-   git push origin feature/mi-feature
-   ```
-
-5. **Code Review** por al menos 1 miembro del equipo
-
-6. **Merge a `main`** después de aprobación
-
----
-
-## 🗄️ Modelo de Datos (Prisma)
-
-### Tablas Principales
-
-#### `reportes`
-- `id` (UUID, PK)
-- `codigo_seguimiento` (String, único, generado automáticamente: REP-XXX)
-- `titulo` (String)
-- `descripcion` (String, nullable)
-- `area_servicio` (Enum: agua, electrico, municipal)
-- `categoria` (Enum: fuga_agua, falta_agua, bache, etc.)
-- `prioridad` (Enum: Alta, Media, Baja) — asignada por el usuario o por defecto "Media"
-- `justificacion_ia` (String, nullable) — campo reservado para futura funcionalidad
-- `clasificado_por_ia` (Boolean) — actualmente false (funcionalidad desactivada)
-- `estado` (Enum: Pendiente, En Revisión, En Progreso, Resuelto, Rechazado)
-- `tipo_ubicacion` (Enum: gps, manual)
-- `latitud`, `longitud` (Float, nullable)
-- `direccion`, `colonia` (String, nullable)
-- `municipio` (String, default: "Monterrey")
-- `foto_url` (String, nullable)
-- `contacto_email`, `contacto_telefono` (String, nullable)
-- `created_at`, `updated_at` (DateTime)
-
-#### `historial_estados`
-- `id` (UUID, PK)
-- `reporte_id` (FK → reportes)
-- `estado_anterior` (String, nullable)
-- `estado_nuevo` (String)
-- `changed_at` (DateTime, default: now)
-
-#### `orientacion_ia`
-- `id` (UUID, PK)
-- `reporte_id` (FK → reportes, único)
-- `institucion_responsable` (String)
-- `medios_contacto` (JSON)
-- `proximos_pasos` (String)
-- `requiere_mas_informacion` (Boolean)
-- `created_at` (DateTime)
-
-### Triggers Automáticos
-
-- **Generación de código de seguimiento:** Al crear un reporte, trigger en Supabase genera `REP-` + número secuencial
-- **Historial de estados:** Al actualizar `reportes.estado`, trigger inserta registro en `historial_estados`
-
----
-
-## 🤖 Integración con IA
-
-### Proveedor de IA Configurable
-
-El backend soporta múltiples proveedores de IA mediante variables de entorno:
-- **Claude** (Anthropic) - variable `ANTHROPIC_API_KEY`
-- **Gemini** (Google) - variable `GEMINI_API_KEY` - versión gratuita disponible
-- Otros proveedores pueden agregarse fácilmente siguiendo el mismo patrón
-
-El sistema selecciona automáticamente el proveedor según la API key configurada en el archivo `.env`.
-
-### Funcionalidades de IA
-
-#### ✅ Guía de Orientación Institucional (Activa)
-
-Al crear un reporte, el sistema genera automáticamente orientación institucional personalizada:
-- **Institución responsable** (ej: "SADM", "CFE", "Municipio de Monterrey")
-- **Medios de contacto** (teléfono, email, horarios de atención)
-- **Próximos pasos** (qué hacer después de reportar)
-- **Información adicional requerida** (si aplica)
-
-Esta orientación se guarda en la tabla `orientacion_ia` y puede consultarse mediante:
-- Endpoint: `GET /api/v1/reportes/:id/guia-ia`
-
-#### ⏸️ Clasificación Automática de Prioridad (Temporalmente Desactivada)
-
-La funcionalidad de clasificación automática de prioridad (Alta/Media/Baja) fue desactivada temporalmente del flujo de creación de reportes debido a ajustes técnicos. 
-
-**Estado actual:**
-- El código de clasificación existe en el backend pero no está integrado en el endpoint `POST /api/reportes`
-- Los reportes se crean con prioridad "Media" por defecto
-- Los campos `justificacion_ia` y `clasificado_por_ia` están reservados para cuando se reactive esta funcionalidad
-
-**Reactivación futura:** La funcionalidad puede integrarse nuevamente llamando al servicio `iaClassifier.js` desde el controlador de reportes.
-
----
-
-## 🗺️ Mapas (Leaflet + OpenStreetMap)
-
-### Stack de Mapas
-
-- **Librería:** Leaflet + react-leaflet
-- **Tiles:** OpenStreetMap (gratuito, sin API key)
-- **Geocoding:** Nominatim (OpenStreetMap)
-
-### Características
-
-- ✅ Mapa interactivo con todos los reportes geolocalizados
-- ✅ Markers con colores según prioridad (Alta: rojo, Media: amarillo, Baja: verde)
-- ✅ Popups con información del reporte al hacer clic
-- ✅ Captura de ubicación GPS automática (Geolocation API)
-- ✅ Búsqueda de dirección con autocompletado (Nominatim)
-- ✅ Sin costos ni límites de API key
-
----
-
-## 🛠️ Troubleshooting
-
-### Problema: Error de conexión a Supabase
+### Frontend no se conecta al backend
 
 **Solución:**
-- Verifica que `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` estén correctos en `server/.env`
-- Verifica que el Security Group de Supabase permita conexiones desde tu IP
-- Verifica que `DATABASE_URL` en `.env` apunte a la BD correcta
+- En desarrollo: Verifica el proxy de Vite en `vite.config.ts`
+- En Docker: Verifica `nginx/conf.d/default.conf`
+- Verifica `CLIENT_ORIGIN` en `server/.env`
 
-### Problema: Contenedores no inician
+**[Ver troubleshooting completo del frontend →](./client/README.md#troubleshooting)**
+
+### Error de conexión a Supabase
+
+**Solución:**
+- Verifica `DATABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en `server/.env`
+- Verifica que el Security Group de Supabase permita tu IP
+- Prueba la conexión directa con `psql`
+
+**[Ver troubleshooting completo del backend →](./server/README.md#troubleshooting)**
+
+### La guía de orientación IA no se genera
+
+**Solución:**
+- Verifica que tengas configurada al menos una API key en `server/.env`:
+  - `ANTHROPIC_API_KEY` (Claude) O
+  - `GEMINI_API_KEY` (Gemini)
+- Verifica saldo de tu cuenta del proveedor
+- Revisa logs: `docker compose logs -f api`
+
+### Contenedores no inician
 
 **Solución:**
 ```bash
@@ -656,29 +464,6 @@ docker compose logs -f
 docker compose down -v
 docker compose up --build
 ```
-
-### Problema: Frontend no se conecta al backend
-
-**Solución:**
-- En desarrollo: Verifica que Vite proxy esté configurado (`vite.config.ts`)
-- En Docker: Verifica que `nginx/conf.d/default.conf` tenga el proxy correcto
-- Verifica `CLIENT_ORIGIN` en `server/.env`
-
-### Problema: La guía de orientación IA no se genera
-
-**Solución:**
-- Verifica que tengas configurada al menos una API key de IA en `server/.env`:
-  - `ANTHROPIC_API_KEY` (para Claude) O
-  - `GEMINI_API_KEY` (para Gemini)
-- Verifica saldo de tu cuenta del proveedor de IA
-- Revisa logs del servidor: `docker compose logs -f api`
-- La funcionalidad de orientación IA está activa; si no funciona, revisa la conectividad con la API del proveedor
-
----
-
-## 📄 Licencia
-
-Este proyecto forma parte del Hackathon Kiro by Código Facilito: **Reto 2. Aplicaciones Web**.
 
 ---
 
@@ -699,10 +484,37 @@ Si encuentras un bug o tienes una sugerencia:
 ## 🙏 Agradecimientos
 
 - **Anthropic** por la API de Claude
+- **Google** por la API de Gemini
 - **Supabase** por la plataforma de base de datos
 - **OpenStreetMap** por los tiles gratuitos de mapas
 - **Kiro** por la metodología de desarrollo spec-driven
+- **Código Facilito** por organizar el Hackathon
+
+---
+
+## 📄 Licencia
+
+Este proyecto forma parte del Hackathon Kiro by Código Facilito: **Reto 2. Aplicaciones Web**.
+
+---
+
+## 🔗 Enlaces Rápidos
+
+| Recurso | Enlace |
+|---------|--------|
+| 🎨 **Documentación Frontend** | [./client/README.md](./client/README.md) |
+| ⚙️ **Documentación Backend** | [./server/README.md](./server/README.md) |
+| 📋 **Requerimientos** | [.kiro/specs/reportes/requirements.md](.kiro/specs/reportes/requirements.md) |
+| 🎨 **Diseño Frontend** | [.kiro/specs/reportes/design.md](.kiro/specs/reportes/design.md) |
+| ⚙️ **Diseño Backend** | [.kiro/specs/backend/design.md](.kiro/specs/backend/design.md) |
+| 📝 **Plan de Tareas** | [.kiro/specs/reportes/tasks.md](.kiro/specs/reportes/tasks.md) |
+| 🔧 **Reglas de Workflow** | [.kiro/steering/workflow.md](.kiro/steering/workflow.md) |
+| 📚 **API Docs (Swagger)** | `http://localhost:3001/api-docs` (en desarrollo) |
 
 ---
 
 **Construido con ❤️ para mejorar las comunidades**
+
+---
+
+> 💡 **Tip:** Para información detallada sobre instalación, configuración, arquitectura, testing y troubleshooting, consulta los READMEs específicos de [Frontend](./client/README.md) y [Backend](./server/README.md).

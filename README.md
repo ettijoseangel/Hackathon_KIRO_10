@@ -11,9 +11,21 @@
 
 ---
 
+## 👩🏻‍💻 Equipo
+
+Este proyecto fue realizado por:
+
+- José Ángel Zavaleta Ruíz.
+- David de Jesús Chavarría Hernández.
+- Michel Benzant.
+- Julián Hernández Vital.
+- Luis Arturo Villarreal López.
+
+---
+
 ## 📖 Descripción del Proyecto
 
-**Reportes Ciudadanos** es una aplicación web para reportar problemas comunitarios (baches, fugas de agua, fallas eléctricas, basura, etc.) y dar seguimiento mediante un código único. El sistema utiliza **clasificación automática con IA** (Claude de Anthropic) para priorizar reportes y generar orientación institucional personalizada, orientado al municipio de Monterrey, Nuevo León, México.
+**Reportes Ciudadanos** es una aplicación web para reportar problemas comunitarios (baches, fugas de agua, fallas eléctricas, basura, etc.) y dar seguimiento mediante un código único. El sistema utiliza **inteligencia artificial** para generar orientación institucional personalizada (institución responsable, medios de contacto, próximos pasos). La plataforma es **adaptable a cualquier municipio**, utilizando datos de Monterrey, Nuevo León como plantilla por defecto.
 
 ### Características Principales
 
@@ -30,7 +42,7 @@
 - Arquitectura cliente-servidor con contenedores Docker
 - API REST con validación robusta
 - Base de datos PostgreSQL gestionada con Prisma ORM
-- Clasificación de prioridad automática con IA (Claude)
+- Orientación institucional con IA (proveedor configurable: Claude, Gemini, etc.)
 - Despliegue en AWS EC2 con Nginx y Docker Compose
 - RLS (Row Level Security) activo en Supabase
 
@@ -99,7 +111,7 @@ proyecto/
 - **Framework:** Express 5.2 (API REST)
 - **ORM:** Prisma 6.9 (PostgreSQL)
 - **Base de Datos:** Supabase (PostgreSQL gestionado, con RLS)
-- **IA:** Claude 3.5 Sonnet (Anthropic) para clasificación y orientación
+- **IA:** Proveedor configurable mediante variable de entorno (Claude de Anthropic, Gemini de Google, etc.)
 - **Seguridad:** Helmet, express-rate-limit, xss, validación robusta
 - **Logging:** Winston (logs estructurados)
 - **Testing:** Vitest + Supertest (integración de endpoints)
@@ -177,8 +189,10 @@ PORT=3001
 SUPABASE_URL=https://xxxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_aqui
 
-# Anthropic IA (clasificación de prioridad)
-ANTHROPIC_API_KEY=sk-ant-xxxx
+# IA (orientación institucional)
+# Proveedor configurable: claude (Anthropic) o gemini (Google)
+ANTHROPIC_API_KEY=sk-ant-xxxx        # Si usas Claude
+# GEMINI_API_KEY=tu-api-key-aqui     # Si usas Gemini (versión gratuita disponible)
 
 # Frontend (CORS)
 CLIENT_ORIGIN=http://localhost:5173
@@ -329,7 +343,7 @@ Configura estos secrets en GitHub:
 
 | Método | Endpoint                     | Descripción                                | Auth |
 |--------|------------------------------|--------------------------------------------|------|
-| POST   | `/api/reportes`              | Crear reporte (con clasificación IA)       | No   |
+| POST   | `/api/reportes`              | Crear reporte con orientación IA           | No   |
 | GET    | `/api/reportes`              | Listar reportes (con filtros)              | No   |
 | GET    | `/api/reportes/:codigo`      | Buscar por código de seguimiento           | No   |
 | PATCH  | `/api/reportes/:id/estado`   | Actualizar estado de un reporte            | No   |
@@ -531,9 +545,9 @@ test: agregar tests de integración para POST /api/reportes
 - `descripcion` (String, nullable)
 - `area_servicio` (Enum: agua, electrico, municipal)
 - `categoria` (Enum: fuga_agua, falta_agua, bache, etc.)
-- `prioridad` (Enum: Alta, Media, Baja) — **clasificada por IA**
-- `justificacion_ia` (String, nullable) — explicación de la IA
-- `clasificado_por_ia` (Boolean) — true si la IA clasificó exitosamente
+- `prioridad` (Enum: Alta, Media, Baja) — asignada por el usuario o por defecto "Media"
+- `justificacion_ia` (String, nullable) — campo reservado para futura funcionalidad
+- `clasificado_por_ia` (Boolean) — actualmente false (funcionalidad desactivada)
 - `estado` (Enum: Pendiente, En Revisión, En Progreso, Resuelto, Rechazado)
 - `tipo_ubicacion` (Enum: gps, manual)
 - `latitud`, `longitud` (Float, nullable)
@@ -566,33 +580,40 @@ test: agregar tests de integración para POST /api/reportes
 
 ---
 
-## 🤖 Integración con IA (Claude)
+## 🤖 Integración con IA
 
-### Flujo de Clasificación Automática
+### Proveedor de IA Configurable
 
-1. **Usuario crea reporte** (POST `/api/reportes`)
-2. **Backend llama a `iaClassifier.js`:**
-   - Envía: `{ titulo, descripcion, categoria }`
-   - Claude analiza y retorna: `{ prioridad, justificacion }`
-3. **Backend guarda en BD:**
-   - `prioridad` (Alta/Media/Baja)
-   - `justificacion_ia` (explicación)
-   - `clasificado_por_ia: true`
+El backend soporta múltiples proveedores de IA mediante variables de entorno:
+- **Claude** (Anthropic) - variable `ANTHROPIC_API_KEY`
+- **Gemini** (Google) - variable `GEMINI_API_KEY` - versión gratuita disponible
+- Otros proveedores pueden agregarse fácilmente siguiendo el mismo patrón
 
-### Fallback (sin API key o error)
+El sistema selecciona automáticamente el proveedor según la API key configurada en el archivo `.env`.
 
-- Si `ANTHROPIC_API_KEY` no existe → `prioridad: "Media"`, `clasificado_por_ia: false`
-- Si timeout (10 seg) → mismo fallback
-- **Nunca falla el endpoint** — siempre crea el reporte
+### Funcionalidades de IA
 
-### Guía de Orientación IA
+#### ✅ Guía de Orientación Institucional (Activa)
 
-Al crear un reporte, también se genera orientación institucional:
+Al crear un reporte, el sistema genera automáticamente orientación institucional personalizada:
 - **Institución responsable** (ej: "SADM", "CFE", "Municipio de Monterrey")
-- **Medios de contacto** (teléfono, email, horarios)
+- **Medios de contacto** (teléfono, email, horarios de atención)
 - **Próximos pasos** (qué hacer después de reportar)
+- **Información adicional requerida** (si aplica)
 
-Endpoint de lectura: `GET /api/v1/reportes/:id/guia-ia`
+Esta orientación se guarda en la tabla `orientacion_ia` y puede consultarse mediante:
+- Endpoint: `GET /api/v1/reportes/:id/guia-ia`
+
+#### ⏸️ Clasificación Automática de Prioridad (Temporalmente Desactivada)
+
+La funcionalidad de clasificación automática de prioridad (Alta/Media/Baja) fue desactivada temporalmente del flujo de creación de reportes debido a ajustes técnicos. 
+
+**Estado actual:**
+- El código de clasificación existe en el backend pero no está integrado en el endpoint `POST /api/reportes`
+- Los reportes se crean con prioridad "Media" por defecto
+- Los campos `justificacion_ia` y `clasificado_por_ia` están reservados para cuando se reactive esta funcionalidad
+
+**Reactivación futura:** La funcionalidad puede integrarse nuevamente llamando al servicio `iaClassifier.js` desde el controlador de reportes.
 
 ---
 
@@ -643,30 +664,21 @@ docker compose up --build
 - En Docker: Verifica que `nginx/conf.d/default.conf` tenga el proxy correcto
 - Verifica `CLIENT_ORIGIN` en `server/.env`
 
-### Problema: IA no clasifica reportes
+### Problema: La guía de orientación IA no se genera
 
 **Solución:**
-- Verifica que `ANTHROPIC_API_KEY` exista en `server/.env`
-- Verifica saldo de la cuenta de Anthropic
+- Verifica que tengas configurada al menos una API key de IA en `server/.env`:
+  - `ANTHROPIC_API_KEY` (para Claude) O
+  - `GEMINI_API_KEY` (para Gemini)
+- Verifica saldo de tu cuenta del proveedor de IA
 - Revisa logs del servidor: `docker compose logs -f api`
+- La funcionalidad de orientación IA está activa; si no funciona, revisa la conectividad con la API del proveedor
 
 ---
 
 ## 📄 Licencia
 
 Este proyecto forma parte del Hackathon Kiro by Código Facilito: **Reto 2. Aplicaciones Web**.
-
----
-
-## 👩🏻‍💻 Equipo
-
-Este proyecto fue realizado por:
-
-- José Ángel Zavaleta Ruíz.
-- David de Jesús Chavarría Hernández.
-- Michel Benzant.
-- Julián Hernández Vital.
-- Luis Arturo Villarreal López.
 
 ---
 

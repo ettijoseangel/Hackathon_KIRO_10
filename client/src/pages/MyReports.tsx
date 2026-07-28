@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Search, CheckCircle, Clock, MapPin, Calendar, AlertCircle, FileText, Phone, Globe, Copy, ArrowRight } from 'lucide-react'
+import { Search, CheckCircle, Clock, MapPin, Calendar, AlertCircle, FileText, Phone, Globe, Copy } from 'lucide-react'
 import { buscarPorCodigo, type ReporteConHistorial } from '@/services/reporteService'
 import { obtenerGuiaIA, type OrientacionIA } from '@/services/orientacionService'
 
@@ -203,7 +203,7 @@ export default function MyReports() {
                     <div>
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Ubicacion</p>
                       <div className="flex items-start gap-1.5 text-xs text-gray-700">
-                        <MapPin className="w-3 h-3 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <MapPin className="w-3 h-3 text-gray-400 mt-0.5 shrink-0" />
                         {getLocationText(report)}
                       </div>
                     </div>
@@ -262,7 +262,7 @@ export default function MyReports() {
               <Card className="shadow-sm border border-indigo-200 overflow-hidden">
                 <CardContent className="p-0">
                   {/* Header de orientación */}
-                  <div className="bg-gradient-to-r from-indigo-600 to-blue-700 px-5 py-4 text-white">
+                  <div className="bg-linear-to-r from-indigo-600 to-blue-700 px-5 py-4 text-white">
                     <p className="text-xs font-semibold uppercase tracking-wide opacity-80 mb-1">Orientacion Institucional</p>
                     <h3 className="text-base font-bold">
                       {orientacion.institucion.nombre
@@ -330,7 +330,7 @@ export default function MyReports() {
                       <div className="space-y-2.5">
                         {orientacion.pasos_siguientes.map((paso) => (
                           <div key={paso.orden} className="flex items-start gap-3">
-                            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                            <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0">
                               {paso.orden}
                             </div>
                             <div>

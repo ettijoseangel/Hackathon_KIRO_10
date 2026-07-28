@@ -1,4 +1,4 @@
-import { Phone, FileText, Search, MapPin, MessageCircle, Clock, HelpCircle, ArrowRight } from 'lucide-react'
+import { Phone, FileText, Search, MapPin, Clock, HelpCircle, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const FAQ = [
@@ -93,7 +93,7 @@ export default function Ayuda() {
               <details key={index} className="group bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors">
                   <span className="text-sm font-semibold text-gray-800 pr-4">{item.pregunta}</span>
-                  <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-90 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-gray-400 shrink-0 group-open:rotate-90 transition-transform" />
                 </summary>
                 <div className="px-5 pb-4">
                   <p className="text-sm text-gray-600 leading-relaxed">{item.respuesta}</p>
@@ -104,7 +104,7 @@ export default function Ayuda() {
         </div>
 
         {/* Contacto de emergencia */}
-        <div className="bg-gradient-to-r from-indigo-700 to-blue-700 rounded-2xl p-8 text-white text-center">
+        <div className="bg-linear-to-r from-indigo-700 to-blue-700 rounded-2xl p-8 text-white text-center">
           <Phone className="w-8 h-8 mx-auto mb-3 opacity-80" />
           <h3 className="text-xl font-bold mb-2">¿Necesitas ayuda inmediata?</h3>
           <p className="text-blue-200 text-sm mb-5 max-w-md mx-auto">

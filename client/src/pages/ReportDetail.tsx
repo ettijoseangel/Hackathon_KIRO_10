@@ -232,7 +232,7 @@ function ReportDetail() {
                       const Icon = MEDIO_ICONS[medio.tipo] || Globe
                       return (
                         <div key={i} className="flex items-center gap-3 border border-gray-200 rounded-xl px-4 py-3">
-                          <Icon className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+                          <Icon className="w-4 h-4 text-indigo-500 shrink-0" />
                           <div>
                             <p className="text-sm font-semibold text-gray-900">{medio.valor}</p>
                             {medio.horario_atencion && (
@@ -269,7 +269,7 @@ function ReportDetail() {
               <div className="space-y-4">
                 {orientacionIA.proximosPasos.map((paso) => (
                   <div key={paso.orden} className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center shrink-0">
                       <span className="text-xs font-bold text-white">{paso.orden}</span>
                     </div>
                     <div>

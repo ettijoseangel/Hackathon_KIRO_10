@@ -15,7 +15,9 @@ export const config = {
         secretKey: process.env.SUPABASE_SECRET_KEY
     },
     ia: {
-        anthropicApiKey: process.env.ANTHROPIC_API_KEY
+        anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+        geminiApiKey: process.env.GEMINI_API_KEY,
+        openaiApiKey: process.env.OPENAI_API_KEY
     },
     docs: {
         urlDocs: process.env.DOCS_URL || `http://localhost:${process.env.PORT || 3001}/api/docs`,

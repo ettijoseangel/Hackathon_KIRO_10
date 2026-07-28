@@ -146,7 +146,7 @@ Plan de implementación del servidor Express para Reportes Ciudadanos. Cada tare
 
 ## Task Dependency Graph
 
-json
+```json
 {
   "waves": [
     { "id": 0, "tasks": ["1.1"] },
@@ -162,4 +162,5 @@ json
     { "id": 10, "tasks": ["11.1", "11.2", "11.3"] },
     { "id": 11, "tasks": ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6"] }
   ]
-}
+}```
+

@@ -1748,7 +1748,7 @@ export default function Landing() {
                     text-gray-500
                     max-w-sm
                   ">
-                    Consulta el estatus de tu reporte en cualquier momento
+                    Actualiza el estatus de tu reporte en cualquier momento
                     con tu folio ciudadano.
                   </p>
 
@@ -2167,7 +2167,7 @@ export default function Landing() {
               text-sm
               max-w-md
             ">
-              En menos de 3 minutos puedes enviar un reporte
+              En menos de 3 minutos recibiras orientacion de como hacer un reporte
               con fotos, ubicación y descripción. La ciudad te escucha.
             </p>
 

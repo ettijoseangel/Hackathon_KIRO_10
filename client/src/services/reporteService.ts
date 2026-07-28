@@ -68,7 +68,7 @@ export interface ListaReportesResponse {
  * El backend clasifica la prioridad con IA automáticamente.
  */
 export async function crearReporte(datos: CrearReporteInput) {
-  return apiRequest<Reporte>('/reportes', {
+  return apiRequest<CrearReporteResponse>('/reportes', {
     method: 'POST',
     body: JSON.stringify(datos),
   })
@@ -110,4 +110,36 @@ export async function actualizarEstado(id: string, estado: string) {
     method: 'PATCH',
     body: JSON.stringify({ estado }),
   })
+}
+
+// Agregar después de las interfaces existentes:
+
+export interface OrientacionIAResponse {
+  id: string
+  reporteId: string
+  institucionNombre: string | null
+  institucionDescripcion: string | null
+  institucionSitioWeb: string | null
+  confianza: number | null
+  mediosContacto: {
+    tipo: string
+    valor: string
+    horario_atencion: string | null
+  }[] | null
+  proximosPasos: {
+    orden: number
+    titulo: string
+    descripcion: string
+  }[] | null
+  requiereMasInformacion: boolean
+  mensajeFallback: string | null
+  modeloIA: string | null
+  promptVersion: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CrearReporteResponse {
+  reporte: Reporte
+  orientacionIA: OrientacionIAResponse | null
 }

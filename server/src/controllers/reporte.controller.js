@@ -17,7 +17,11 @@ export async function crearReporte (req, res, next) {
       return res.status(400).json({ error: resultado.errores.join('; ') })
     }
 
-    return res.status(201).json(resultado.reporte)
+    return res.status(201).json({
+      reporte: resultado.reporte,
+      orientacionIA: resultado.orientacionIA || null
+    })
+
   } catch (error) {
     next(error)
   }

@@ -1,0 +1,15 @@
+info:
+  name: Indicaciones de IA
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:3001/api/v1/reportes/0c494fef-6e87-4bd8-8b55-9035f4d11914/guia-ia
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

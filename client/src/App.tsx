@@ -5,6 +5,7 @@ import ReportForm from './pages/ReportForm'
 import MyReports from './pages/MyReports'
 import MapaIncidencias from './pages/MapaIncidencias'
 import Ayuda from './pages/Ayuda'
+import ReportDetail from './pages/ReportDetail'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="mis-reportes" element={<MyReports />} />
           <Route path="mapa" element={<MapaIncidencias />} />
           <Route path="ayuda" element={<Ayuda />} />
+          <Route path="reporte-detalle" element={<ReportDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>

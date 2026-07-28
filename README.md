@@ -1,6 +1,6 @@
-# 🏙️ Reporte Cívico
+# 🏙️ Reporte Cívico - Aplicación Web de Reportes Comunitarios
 
-> 👩🏻‍💻 Proyecto realizado por Biters (Equipo 10) en el Hackathon Kiro
+> 👩🏻‍💻 Proyecto realizado por Biters (Equipo 10) en el Hackathon Kiro by Código Facilito.
 
 [![React](https://img.shields.io/badge/React-19.2-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.1-purple.svg)](https://vitejs.dev/)
@@ -13,7 +13,7 @@
 
 ## 📖 Descripción del Proyecto
 
-**Reporte Cívico** es una aplicación web para reportar problemas comunitarios (baches, fugas de agua, fallas eléctricas, basura, etc.) y dar seguimiento mediante un código único. El sistema utiliza **clasificación automática con IA** (Claude de Anthropic) para priorizar reportes y generar orientación institucional personalizada.
+**Reporte Cívico** es una aplicación web para reportar problemas comunitarios (baches, fugas de agua, fallas eléctricas, basura, etc.) y dar seguimiento mediante un código único. El sistema utiliza **clasificación automática con IA** (Claude de Anthropic) para priorizar reportes y generar orientación institucional personalizada, orientado al municipio de Monterrey, Nuevo León, México.
 
 ### Características Principales
 
@@ -25,12 +25,6 @@
 - Guía de orientación con IA: institución responsable, medios de contacto, próximos pasos
 - Interfaz intuitiva y responsiva (mobile-first)
 
-✅ **Para Administradores:**
-- Dashboard para gestionar todos los reportes
-- Filtros por área de servicio, categoría, prioridad y estado
-- Actualización de estados en tiempo real
-- Historial completo de cambios de estado
-- Vista de mapa con todos los reportes geolocalizados
 
 ✅ **Técnicas:**
 - Arquitectura cliente-servidor con contenedores Docker
@@ -662,7 +656,19 @@ docker compose up --build
 
 ## 📄 Licencia
 
-Este proyecto es parte del Hackathon Kiro by Código Facilito: **Reto 2. Aplicaciones Web**.
+Este proyecto forma parte del Hackathon Kiro by Código Facilito: **Reto 2. Aplicaciones Web**.
+
+---
+
+## 👩🏻‍💻 Equipo
+
+Este proyecto fue realizado por:
+
+- José Ángel Zavaleta Ruíz.
+- David de Jesús Chavarría Hernández.
+- Michel Benzant.
+- Julián Hernández Vital.
+- Luis Arturo Villarreal López.
 
 ---
 
